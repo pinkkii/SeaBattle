@@ -1,0 +1,55 @@
+@import url('https://fonts.googleapis.com/css2?family=Architects+Daughter&display=swap');
+
+body, .btn-app{
+	font-family: 'Architects Daughter', cursive;
+}
+
+body{
+	background: url("/src/img/backbround_img.jpg") right;
+}
+
+.wrapper-app{
+	max-width: 1350px;
+	margin: 0 auto;
+	margin-top: 50px;
+	padding: 10px;
+	.wrapper-battlefields-app{
+		display: flex;
+		flex-direction: row;
+		justify-content: center;
+		.item{
+			margin-bottom: 40px;
+			font-size: x-large;
+		}
+		.battlefield{
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+			table{
+				border-collapse: collapse;
+				border: 4px solid rgba(0, 0, 255, .7);
+
+				tr,td{
+					border: 2px solid rgba(0, 0, 255, 0.6);
+					width: 32px;
+					height: 32px;
+				}
+			}
+		}
+
+		.wrapper-button{
+			display: flex;
+			flex-direction: column;
+			justify-content: flex-end;
+			align-items: center;
+			padding: 30px;
+			.btn-app{
+				border-radius: 5px;
+				font-size:medium;
+				max-width: 250px;
+				padding: 7px 14px;
+				margin-bottom: 15px;
+			}
+		}
+	}
+}
