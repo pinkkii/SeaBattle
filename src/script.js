@@ -1,1 +1,1 @@
-const mouse = new Mouse();
+const mouse = new Mouse(document.body);
