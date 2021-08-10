@@ -18,6 +18,7 @@ body{
 		flex-direction: row;
 		justify-content: center;
 		.item{
+			text-align: center;
 			margin-bottom: 40px;
 			font-size: x-large;
 		}
@@ -32,7 +33,20 @@ body{
 					border: 2px solid rgba(0, 0, 255, 0.6);
 					width: 32px;
 					height: 32px;
+					position: relative;
 				}
+			}
+			.marker{
+				font-size: 18px;
+				position: absolute;
+			}
+			.marker-row{
+				left: 10px;
+				top: -25px;
+			}
+			.marker-column{
+				left: -25px;
+				top: 10px;
 			}
 		}
 
@@ -41,7 +55,7 @@ body{
 			flex-direction: column;
 			justify-content: flex-end;
 			align-items: center;
-			padding: 30px;
+			padding: 40px;
 			.btn-app{
 				border-radius: 5px;
 				font-size:medium;

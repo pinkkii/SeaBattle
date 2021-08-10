@@ -1,6 +1,6 @@
 const mouse = new Mouse(document.body);
 
-const battlefield = new Battlefield();
+const app = new Application();
 // requestAnimationFrame(tick);
 
 // function tick(){
