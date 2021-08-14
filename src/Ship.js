@@ -3,9 +3,12 @@ class Ship {
     y = null;
 
     direction = null;
+    killed = false;
+    size = null;
 
-    constructor(direction){
-        this.direction = direction;
+    constructor(direction, size){
+        Object.assign(this, { direction, size });
+        
     }
 
 

@@ -1,0 +1,3 @@
+class PrepatetionScene extends Scene{
+    
+}
