@@ -1,20 +1,9 @@
-const ShipDatas = [
-    {size: 4, direction: "row", startX: 10, startY: 345 },
-    {size: 3, direction: "row", startX: 10, startY: 395 },
-    {size: 3, direction: "row", startX: 120, startY: 390 },
-    {size: 2, direction: "row", startX: 10, startY: 435 },
-    {size: 2, direction: "row", startX: 88, startY: 435 },
-    {size: 2, direction: "row", startX: 167, startY: 435 },
-    {size: 1, direction: "row", startX: 10, startY: 480 },
-    {size: 1, direction: "row", startX: 55, startY: 480 },
-    {size: 1, direction: "row", startX: 100, startY: 480 },
-    {size: 1, direction: "row", startX: 145, startY: 480 },
-]
-
 class Battlefield {
     div = null;
     table = null;
-    
+
+    dock = null; //хранятся все div-ы кораблей
+
     cells = [];
     ships = [];
     shoots = [];
@@ -24,8 +13,12 @@ class Battlefield {
         const div = document.createElement("div");
         div.classList.add("battlefield");
 
+        const dock = document.createElement("div");
+        dock.classList.add("battlefield-dock");
+
         this.table = table;
         this.div = div;
+        this.dock = dock;
 
         for(let y = 0; y < 10; y++){
             const row = [];
@@ -42,7 +35,7 @@ class Battlefield {
             this.cells.push(row);
         }
 
-        div.append(table);
+        div.append(table, dock);
 
         for (let x = 0; x < 10; x++) {
             const cell = this.cells[0][x];
@@ -62,6 +55,20 @@ class Battlefield {
             cell.append(marker);
         }
 
+    }
+
+    addShip(ship){
+        if (!this.ships.includes(ship) ) {
+            this.ships.push(ship);
+            this.dock.append(ship.div);
+
+            ship.div.style.left = `${ship.startX}px`;
+            ship.div.style.top = `${ship.startY}px`;
+        }
+        else{
+            console.log("addShip false");
+            return false;
+        }
     }
 
 }
