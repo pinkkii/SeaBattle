@@ -5,6 +5,8 @@ body, .btn-app {
 
 body {
   background: url("/src/img/backbround_img.jpg") right;
+  width: 100vw;
+  height: 100vh;
 }
 
 .wrapper-app {

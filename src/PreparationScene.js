@@ -22,5 +22,12 @@ class PreparationScene extends Scene{
         }
     }
 
-    update(){}
+    update(){
+        const { mouse, player } = this.app;
+
+        //потенциально хотим тянуть кобаль
+        if (condition) {
+            
+        }
+    }
 }
