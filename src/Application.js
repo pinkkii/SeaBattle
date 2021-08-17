@@ -27,17 +27,35 @@ class Application{
         for(const scene of Object.values(this.scenes)){
             scene.init();
         }
-
+       
         requestAnimationFrame(() => this.tick());
     }
 
     tick(){
         requestAnimationFrame(() => this.tick());
                 
-        // if(this.activeScene){
-        //     this.activeScene.update();
-        // }
+        if(this.activeScene){
+            this.activeScene.update();
+        }
         
         this.mouse.tick();
+    }
+
+    start(sceneName, ...args){
+        if(this.activeScene && this.activeScene.name === sceneName){
+            return false;
+        }
+        if(!this.scenes.hasOwnProperty(sceneName)){
+            return false;
+        }
+
+        if(this.activeScene){
+            this.activeScene.stop();
+        }
+
+        const scene = this.scenes[sceneName];
+        this.activeScene = scene;
+
+        return true;
     }
 }

@@ -9,7 +9,7 @@ class Ship {
     killed = false;
     size = null;
     div = null;
-
+    
     constructor(size, direction, startX, startY){
         const div = document.createElement("div");
         div.classList.add("ship");
@@ -23,5 +23,8 @@ class Ship {
         this.div.classList.add(`ship-${this.direction}-${this.size}`);
         return true;
     }
-
+    
+    isUnder(point){
+        return isUnderPoint(point, this.div);
+    }
 }
