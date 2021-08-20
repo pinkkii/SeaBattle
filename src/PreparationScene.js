@@ -25,64 +25,70 @@ class PreparationScene extends Scene{
         }
     }
 
+    start(){
+        const { player } = this.app;
+        console.log(player.matrix);
+    }
+
     update(){
         const { mouse, player } = this.app;
 
-        //потенциально хотим тянуть кобаль
+        //потенциально хотим начать тянуть кобаль
+        if (!this.draggedShip && mouse.left && !mouse.pLeft) {
+            const ship = player.ships.find((ship) => ship.isUnder(mouse));
+            if (ship) {
+                const rect = ship.div.getBoundingClientRect();
 
+                this.draggedShip = ship;
+                this.draggedOffsetX = mouse.x - rect.left;
+                this.draggedOffsetY = mouse.y - rect.top;
+            }
+        }
 
-        // // Потенциально хотим начать тянуть корабль
-		// if (!this.draggedShip && mouse.left && !mouse.pLeft) {
-		// 	const ship = player.ships.find((ship) => ship.isUnder(mouse));
+        //перетаскивание
+        if (this.draggedShip && mouse.left) {
+            const { left, top } = player.div.getBoundingClientRect();
+            const x = mouse.x - left - this.draggedOffsetX;
+            const y = mouse.y - top - this.draggedOffsetY;
 
-		// 	if (ship) {
-		// 		const shipRect = ship.div.getBoundingClientRect();
+            this.draggedShip.div.style.left = `${x}px`;
+            this.draggedShip.div.style.top = `${y}px`;
+        }
 
-		// 		this.draggedShip = ship;
-		// 		this.draggedOffsetX = mouse.x - shipRect.left;
-		// 		this.draggedOffsetY = mouse.y - shipRect.top;
+        // Бросание
+        if (!mouse.left && this.draggedShip) {
+            const ship = this.draggedShip;
+            this.draggedShip = null;
 
-		// 		ship.x = null;
-		// 		ship.y = null;
-		// 	}
-		// }
+            const { left, top } = ship.div.getBoundingClientRect();
+            const { width, height } = player.cells[0][0].getBoundingClientRect();
 
-		// // Перетаскивание
-		// if (mouse.left && this.draggedShip) {
-		// 	const { left, top } = player.div.getBoundingClientRect();
-		// 	const x = mouse.x - left - this.draggedOffsetX;
-		// 	const y = mouse.y - top - this.draggedOffsetY;
+            const point = {
+                x: left + width / 2,
+                y: top + height / 2,
+            }
 
-		// 	this.draggedShip.div.style.left = `${x}px`;
-		// 	this.draggedShip.div.style.top = `${y}px`;
-		// }
-        // //Бросание 
-        // if(!mouse.left && this.draggedShip){
-        //     const ship = this.draggedShip;
-        //     this.draggedShip = null;
- 
-        //     const { left, top } = ship.div.getBoundingClientRect();
-        //     const { width, height } = player.cells[0][0].getBoundingClientRect();
- 
-        //     const point = {
-        //          x: left + width / 2,
-        //          y: top + height / 2,
-        //     }
- 
-        //     const cell = player.cells
-        //          .flat()
-        //          .find((cell) => isUnderPoint(point, cell));
- 
-        //      if(cell){
-        //          const x = parseInt(cell.dataset.x);
-        //          const y = parseInt(cell.dataset.y);
- 
-        //          player.removeShip(ship);
-        //          player.addShip(ship, x, y);
-        //      } else{
-        //          player.removeShip(ship);
-        //          player.addShip(ship);
-        //      }
-        // }
+            const cell = player.cells.flat().find((cell) => isUnderPoint(point, cell));
+
+            if (cell) {
+                const x = parseInt(cell.dataset.x);
+                const y = parseInt(cell.dataset.y);
+
+                player.removeShip(ship);
+                player.addShip(ship, x, y);
+                console.log(player.matrix);
+            } else {
+                player.removeShip(ship);
+                player.addShip(ship);
+                console.log(player.matrix);
+            }
+        }
+
+        //Врощение
+        if (this.draggedShip && mouse.delta) {
+            this.draggedShip.toggleDirection();
+        }
+        
+
     }
 }

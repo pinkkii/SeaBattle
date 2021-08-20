@@ -9,6 +9,10 @@ class Ship {
     killed = false;
     size = null;
     div = null;
+
+    get placed(){
+        return this.x !== null && this.y !== null;
+    }
     
     constructor(size, direction, startX, startY){
         const div = document.createElement("div");
@@ -16,14 +20,24 @@ class Ship {
 
         Object.assign(this, { direction, size, startX, startY, div });
 
-        this.setDirection();
+        this.setDirection(direction, true);
     }
 
-    setDirection(){
+    setDirection(newDirection, force = false){
+        if (!force && this.direction === newDirection) {
+            return false;
+        }
+        this.div.classList.remove(`ship-${this.direction}-${this.size}`);
+        this.direction = newDirection;
         this.div.classList.add(`ship-${this.direction}-${this.size}`);
         return true;
     }
     
+    toggleDirection(){
+        const newDirection = this.direction === "row" ? "column" : "row";
+        this.setDirection(newDirection);
+    }
+
     isUnder(point){
         return isUnderPoint(point, this.div);
     }

@@ -55,7 +55,8 @@ class Application{
 
         const scene = this.scenes[sceneName];
         this.activeScene = scene;
-
+        scene.start(...args);
+        
         return true;
     }
 }
