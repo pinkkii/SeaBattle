@@ -15,19 +15,37 @@ class PreparationScene extends Scene{
     draggedShip = null;
     draggedOffsetX = 0;
     draggedOffsetY = 0;  
+
+    removeEventListeners = [];
     
     init(){
-        const { player } = this.app;
-
-        for (const { size, direction, startX, startY } of ShipDatas) {
-            const ship = new Ship(size, direction, startX, startY);
-            player.addShip(ship);
-        }
+        console.log("init Preparation");
+        this.manually();
     }
 
     start(){
-        const { player } = this.app;
-        console.log(player.matrix);
+        console.log("preparation start");
+        const { player, opponent } = this.app;
+
+        //player.removeAllShoots();
+
+        const btnPlay = document.querySelector(`[data-type="play"]`);
+        const btnRandom = document.querySelector(`[data-type="random"]`);
+        const btnManually = document.querySelector(`[data-type="manually"]`);
+
+        this.removeEventListeners.push(
+            addEventListener(btnPlay, "click", () => this.PlayButton())
+        );
+
+        this.removeEventListeners.push(
+            addEventListener(btnRandom, "click", () => this.RandomPlaceShips())
+        );
+
+        this.removeEventListeners.push(
+            addEventListener(btnManually, "click", () => this.manually())
+        );
+
+
     }
 
     update(){
@@ -88,7 +106,61 @@ class PreparationScene extends Scene{
         if (this.draggedShip && mouse.delta) {
             this.draggedShip.toggleDirection();
         }
-        
+
+        let visibleBtn = true;
+        //если все корабли расставлены, включается кнопка БОЯ
+        for(let i = 0; i < 10; i++){
+            if(!player.ships[i].placed){
+                visibleBtn = false;
+            }
+        }
+
+        if (visibleBtn) {
+            document.querySelector(`[data-type="play"]`).disabled = false;
+        } else {
+            document.querySelector(`[data-type="play"]`).disabled = true;
+        }
 
     }
+
+    stop(){
+        console.log("STOP preparation");
+        for(const removeEventListener of this.removeEventListeners){
+            removeEventListener(); 
+        }
+
+        this.removeEventListeners = [];
+    }
+
+    manually(){
+        const { player } = this.app;
+
+        player.removeAllShips();
+
+        for (const { size, direction, startX, startY } of ShipDatas) {
+            const ship = new Ship(size, direction, startX, startY);
+            player.addShip(ship);
+        }
+    }
+
+    RandomPlaceShips(){
+        const { player } = this.app;
+        
+        this.app.player.randomize();
+
+        for(let i = 0; i < 10; i++){
+            const ship = player.ships[i];
+
+            ship.startX = ShipDatas[i].startX;
+            ship.startY = ShipDatas[i].startY;
+        }
+    }
+
+    PlayButton(){
+        console.log("PlayButton");
+        this.stop();
+        this.app.start("computer");
+    }
+
+
 }

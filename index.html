@@ -15,9 +15,9 @@
 				<h1 class="item">Моё поле</h1>
 			</div>
 			<div class="wrapper-button">
-				<button class="btn-app" disabled>Играть против бота</button>
-				<button class="btn-app">Расставить корабли в случайном порядке</button>
-				<button class="btn-app">Расставить корабли вручную</button>
+				<button class="btn-app" data-type="play" disabled>Играть против бота</button>
+				<button class="btn-app" data-type="random">Расставить корабли в случайном порядке</button>
+				<button class="btn-app" data-type="manually">Расставить корабли вручную</button>
 				<button class="btn-app btn-surrender" hidden>Сдаться</button>
 			</div>
 			<div data-side="opponent">
@@ -34,6 +34,7 @@
 
 	<script src="./src/Scene.js"></script>
 	<script src="./src/PreparationScene.js"></script>
+	<script src="./src/ComputerScene.js"></script>
 
 	<script src="./src/Battlefield.js"></script>
 

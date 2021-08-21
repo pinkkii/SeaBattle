@@ -8,6 +8,8 @@ class Battlefield {
     ships = [];
     shoots = [];
 
+    showShip = true;
+
     _private_matrix = null;
     _private_changed = true;
 
@@ -26,6 +28,7 @@ class Battlefield {
                     y,
                     ship: null,
                     free: true,
+                    shoot: null,
                 }
                 row.push(item);
             }
@@ -62,14 +65,13 @@ class Battlefield {
             
         }
 
-        console.log("matrix update");
         this._private_matrix = matrix;
         this._private_changed = false;
 
         return this._private_matrix;
     }
 
-    constructor(){
+    constructor(showShip = true){
         const table = document.createElement("table");
         const div = document.createElement("div");
         div.classList.add("battlefield");
@@ -80,6 +82,7 @@ class Battlefield {
         this.table = table;
         this.div = div;
         this.dock = dock;
+        this.showShip = showShip;
 
         for(let y = 0; y < 10; y++){
             const row = [];
@@ -122,7 +125,6 @@ class Battlefield {
         if (this.ships.includes(ship) ) {
             return false;
         }
-        let LogicFlag = true;
 
         this.ships.push(ship);
 
@@ -154,25 +156,47 @@ class Battlefield {
             }
         }
             
-        this.dock.append(ship.div);
+        if (this.showShip) {
+            this.dock.append(ship.div);
 
-        if(ship.placed){
-            const cell = this.cells[y][x];
-            const cellRect = cell.getBoundingClientRect();
-            const battlefieldRect = this.div.getBoundingClientRect();
+            if(ship.placed){
+                const cell = this.cells[y][x];
+                const cellRect = cell.getBoundingClientRect();
+                const battlefieldRect = this.div.getBoundingClientRect();
 
-            ship.div.style.left = `${cellRect.left - battlefieldRect.left}px`;
-            ship.div.style.top = `${cellRect.top - battlefieldRect.top}px`;
-        } else{
-            ship.setDirection("row");
-            ship.div.style.left = `${ship.startX}px`;
-            ship.div.style.top = `${ship.startY}px`;
+                ship.div.style.left = `${cellRect.left - battlefieldRect.left}px`;
+                ship.div.style.top = `${cellRect.top - battlefieldRect.top}px`;
+            } else{
+                ship.setDirection("row");
+                ship.div.style.left = `${ship.startX}px`;
+                ship.div.style.top = `${ship.startY}px`;
+            }
         }
             
         this._private_changed = true;
         return true;
     }
 
+    randomize(){
+        this.removeAllShips();
+
+        for(let size = 4; size >= 1; size--){
+            for(let n = 0; n < 5 - size; n++){
+                const newDir = getRandomDirection();
+                const ship = new Ship(size, newDir);
+
+                while (!ship.placed) {
+                    const x = getRandomBetween(0,9);
+                    const y = getRandomBetween(0,9);
+
+                    this.removeShip(ship);
+                    this.addShip(ship, x, y);
+                }
+            }
+        }
+        
+    }
+    
     removeShip(ship){
         if (!this.ships.includes(ship)) {
             return false;
@@ -189,6 +213,16 @@ class Battlefield {
         }
 
         this._private_changed = true;
+        return true;
+    }
+
+    removeAllShips(){
+        const ships = this.ships.slice();
+
+        for (const ship of ships) {
+            this.removeShip(ship);
+        }
+
         return true;
     }
 

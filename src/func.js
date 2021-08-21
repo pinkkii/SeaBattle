@@ -4,3 +4,18 @@ function isUnderPoint(point, element){
     
     return left <= x && x <= left + width && top <= y && y <= top + height;
 }
+
+function getRandomBetween(min, max){
+    return min + Math.floor(Math.random() * (max - min + 1));
+}
+
+function getRandomDirection(){
+    let randNum = Math.floor(Math.random() * 2);
+
+    return (randNum === 0 ? "row" : "column");
+}
+
+function addEventListener(element, ...args){
+    element.addEventListener(...args);
+    return () => element.removeEventListener(...args); 
+}

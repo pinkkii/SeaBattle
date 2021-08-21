@@ -108,6 +108,10 @@ body {
   margin-bottom: 15px;
 }
 
+.wrapper-app .wrapper-battlefields-app .wrapper-button .btn-surrender {
+  margin: 0 79px;
+}
+
 .ship {
   position: absolute;
   top: 0;
