@@ -11,7 +11,7 @@ class Application{
         const mouse = new Mouse(document.body);
 
         const player = new Battlefield(true);
-        const opponent = new Battlefield(false);
+        const opponent = new Battlefield();
 
         Object.assign(this, { mouse, player, opponent });
             

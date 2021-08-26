@@ -94,11 +94,9 @@ class PreparationScene extends Scene{
 
                 player.removeShip(ship);
                 player.addShip(ship, x, y);
-                console.log(player.matrix);
             } else {
                 player.removeShip(ship);
                 player.addShip(ship);
-                console.log(player.matrix);
             }
         }
 

@@ -9,6 +9,7 @@ class Ship {
     killed = false;
     size = null;
     div = null;
+    stars = false;
 
     get placed(){
         return this.x !== null && this.y !== null;
