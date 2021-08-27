@@ -27,11 +27,24 @@ class PreparationScene extends Scene{
         console.log("preparation start");
         const { player, opponent } = this.app;
 
-        //player.removeAllShoots();
+        player.removeAllShoots();
+        player.removeAllStars();
+        player.removeAllShips();
+        this.init();
+        
+        opponent.removeAllShoots();
+        opponent.removeAllStars();
+        opponent.removeAllShips();
 
         const btnPlay = document.querySelector(`[data-type="play"]`);
         const btnRandom = document.querySelector(`[data-type="random"]`);
         const btnManually = document.querySelector(`[data-type="manually"]`);
+        const surrender = document.querySelector(`[data-type="surrender"]`);
+
+        btnPlay.hidden = false;
+        btnRandom.hidden = false;
+        btnManually.hidden = false;
+        surrender.hidden = true;
 
         this.removeEventListeners.push(
             addEventListener(btnPlay, "click", () => this.PlayButton())
@@ -105,15 +118,8 @@ class PreparationScene extends Scene{
             this.draggedShip.toggleDirection();
         }
 
-        let visibleBtn = true;
         //если все корабли расставлены, включается кнопка БОЯ
-        for(let i = 0; i < 10; i++){
-            if(!player.ships[i].placed){
-                visibleBtn = false;
-            }
-        }
-
-        if (visibleBtn) {
+        if (player.allShipsPlaced) {
             document.querySelector(`[data-type="play"]`).disabled = false;
         } else {
             document.querySelector(`[data-type="play"]`).disabled = true;

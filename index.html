@@ -12,16 +12,16 @@
 	<div class="wrapper-app">
 		<div class="wrapper-battlefields-app">
 			<div data-side="player">
-				<h1 class="item">Моё поле</h1>
+				<h1 class="item" data-status="player">Моё поле</h1>
 			</div>
 			<div class="wrapper-button">
 				<button class="btn-app" data-type="play" disabled>Играть против бота</button>
 				<button class="btn-app" data-type="random">Расставить корабли в случайном порядке</button>
 				<button class="btn-app" data-type="manually">Расставить корабли вручную</button>
-				<button class="btn-app btn-surrender" hidden>Сдаться</button>
+				<button class="btn-app btn-surrender" data-type="surrender" hidden>Сдаться</button>
 			</div>
 			<div data-side="opponent">
-				<h1 class="item">Поле противника</h1>
+				<h1 class="item" data-status="opponent">Поле противника</h1>
 			</div>
 		</div>
 	</div>

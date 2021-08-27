@@ -107,6 +107,18 @@ class Battlefield {
         return false;
     }
 
+    get allShipsPlaced(){
+        for(let ship of this.ships){
+            if(this.ships.length === 0){
+                return false;
+            }
+            if(!ship.placed){
+                return false;
+            }
+        }
+        return true;
+    }
+    
     constructor(showShip = true){
         const table = document.createElement("table");
         const div = document.createElement("div");
@@ -197,6 +209,32 @@ class Battlefield {
         
         this._private_changed = true;
         return true;
+    }
+
+    removeStar(star){
+        if (!this.stars.includes(star)) {
+            return false;
+        }
+
+        const index = this.stars.indexOf(star);
+        this.stars.splice(index, 1);
+
+        if (Array.prototype.includes.call(this.dockStars.children, star.div)) {
+			star.div.remove();
+		}
+
+        this._private_changed = true;
+        return true;
+    }
+
+    removeAllStars(){
+        const stars = this.stars.slice();
+
+        for (const star of stars) {
+            this.removeStar(star);
+        }
+
+        return stars.length;
     }
 
     addShip(ship, x, y){

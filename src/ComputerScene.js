@@ -4,6 +4,7 @@ class ComputerScene extends Scene{
 
     end = false;
 
+    removeEventListeners = [];
     init() {
         console.log("init computer");
         this.RandomPlaceShips();
@@ -13,16 +14,27 @@ class ComputerScene extends Scene{
         console.log("start Computer");
         const { opponent } = this.app;
 
+        this.init();
+
         const btnPlay = document.querySelector(`[data-type="play"]`).hidden = true;
         const btnRandom = document.querySelector(`[data-type="random"]`).hidden = true;
         const btnManually = document.querySelector(`[data-type="manually"]`).hidden = true;
-        const surrender = document.querySelector(".btn-surrender").hidden = false;
+        const surrender = document.querySelector(`[data-type="surrender"]`);
+
+        surrender.hidden = false;
+        
+        this.removeEventListeners.push(
+            addEventListener(surrender, "click", () => this.surrenderFunc())
+        );
 
     }
 
     update() {
         const { mouse, player, opponent } = this.app;
         const isUnder = isUnderPoint(mouse, opponent.div);
+
+        let playerStatus = document.querySelector(`[data-status="player"]`);
+        let opponentStatus = document.querySelector(`[data-status="opponent"]`);
 
         let dieShip = player.killedShip || opponent.killedShip;
         this.end = player.loser || opponent.loser;
@@ -46,7 +58,9 @@ class ComputerScene extends Scene{
             }
         } else {
             if (!this.turnPlayer) {
-    
+                opponentStatus.style.backgroundColor = `rgba(17, 158, 17, .6)`;
+                playerStatus.style.backgroundColor = `rgba(224, 24, 24, .6)`;
+
                 let x = getRandomBetween(0,9);
                 let y = getRandomBetween(0,9);
         
@@ -61,9 +75,12 @@ class ComputerScene extends Scene{
                     console.log("result true");
                 }
                 console.log("BOT: ", x, y);
+            } else {
+                opponentStatus.style.backgroundColor = `rgba(224, 24, 24, .6)`;
+                playerStatus.style.backgroundColor = `rgba(17, 158, 17, .6)`;
             }
     
-    
+            
             if (isUnder && mouse.left && !mouse.pLeft) {
                 const cell = opponent.cells.flat().find((cell) => isUnderPoint(mouse, cell));
                 const x = parseInt(cell.dataset.x);
@@ -98,5 +115,19 @@ class ComputerScene extends Scene{
             ship.startX = ship.x;
             ship.startY = ship.y;
         }
+    }
+
+    stop(){
+        console.log("STOP computer");
+        for(const removeEventListener of this.removeEventListeners){
+            removeEventListener(); 
+        }
+
+        this.removeEventListeners = [];
+    }
+
+    surrenderFunc(){
+        this.stop();
+        this.app.start("preparation");
     }
 }
