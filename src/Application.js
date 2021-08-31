@@ -12,7 +12,7 @@ class Application{
         const mouse = new Mouse(document.body);
 
         const player = new Battlefield(true);
-        const opponent = new Battlefield();
+        const opponent = new Battlefield(false);
 
         let bot = new Bot(player);
 
