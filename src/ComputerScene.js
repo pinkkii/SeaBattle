@@ -26,15 +26,16 @@ class ComputerScene extends Scene{
         this.removeEventListeners.push(
             addEventListener(surrender, "click", () => this.surrenderFunc())
         );
-
     }
 
     update() {
-        const { mouse, player, opponent } = this.app;
+        const { mouse, player, opponent, bot } = this.app;
         const isUnder = isUnderPoint(mouse, opponent.div);
 
         let playerStatus = document.querySelector(`[data-status="player"]`);
         let opponentStatus = document.querySelector(`[data-status="opponent"]`);
+
+        let status = document.querySelector(".result");
 
         let dieShip = player.killedShip || opponent.killedShip;
         this.end = player.loser || opponent.loser;
@@ -50,58 +51,57 @@ class ComputerScene extends Scene{
         }
         
         if(this.end){
+            status.hidden = false;
             if (opponent.loser) {
-                console.log("You win's!!!");
+                status.textContent = "You win's!!!";
+
             }
             else {
-                console.log("You lose");
+                status.textContent = "You lose";
             }
-        } else {
+        }
+
+        if(!this.end){
             if (!this.turnPlayer) {
                 opponentStatus.style.backgroundColor = `rgba(17, 158, 17, .6)`;
                 playerStatus.style.backgroundColor = `rgba(224, 24, 24, .6)`;
-
-                let x = getRandomBetween(0,9);
-                let y = getRandomBetween(0,9);
-        
-                let shoot = new Shoot(x, y);
-                let result = player.addShoot(shoot);
     
-                if(shoot.variant === "wounded" || shoot.variant === "killed"){
-                    console.log("result false");
-                    this.turnPlayer = false;
-                } else {
+                bot.ShootBot();
+    
+                if(bot.miss === true){
                     this.turnPlayer = true;
-                    console.log("result true");
+                } else {
+                     this.turnPlayer = false;
                 }
-                console.log("BOT: ", x, y);
-            } else {
+            }
+        
+            if (this.turnPlayer) {
                 opponentStatus.style.backgroundColor = `rgba(224, 24, 24, .6)`;
                 playerStatus.style.backgroundColor = `rgba(17, 158, 17, .6)`;
-            }
     
+                if (isUnder && mouse.left && !mouse.pLeft) {
+                    const cell = opponent.cells.flat().find((cell) => isUnderPoint(mouse, cell));
+                    const x = parseInt(cell.dataset.x);
+                    const y = parseInt(cell.dataset.y);
             
-            if (isUnder && mouse.left && !mouse.pLeft) {
-                const cell = opponent.cells.flat().find((cell) => isUnderPoint(mouse, cell));
-                const x = parseInt(cell.dataset.x);
-                const y = parseInt(cell.dataset.y);
-    
-                console.log(x,y);
-                const item = opponent._private_matrix[y][x];
-
-                if (cell && !item.star && !item.shoot) {
-                    const ship = opponent.ships.find((ship) => ship.isUnder(mouse));
-                    if (ship) {
-                        const shoot = new Shoot(x, y);
-                        opponent.addShoot(shoot);
-                    } else {
-                        const shoot = new Shoot(x, y, "miss");
-                        opponent.addShoot(shoot);
-                        this.turnPlayer = false;
+                    console.log(x,y);
+                    const item = opponent._private_matrix[y][x];
+        
+                    if (cell && !item.star && !item.shoot) {
+                        const ship = opponent.ships.find((ship) => ship.isUnder(mouse));
+                        if (ship) {
+                            const shoot = new Shoot(x, y);
+                            opponent.addShoot(shoot);
+                        } else {
+                            const shoot = new Shoot(x, y, "miss");
+                            opponent.addShoot(shoot);
+                            this.turnPlayer = false;
+                        }
                     }
                 }
-            }
+            }   
         }
+        
     }
 
     RandomPlaceShips(){

@@ -55,6 +55,7 @@ body {
   -webkit-box-align: center;
       -ms-flex-align: center;
           align-items: center;
+  background: rgba(255, 245, 245, 0.8);
 }
 
 .wrapper-app .wrapper-battlefields-app .battlefield table {
@@ -111,6 +112,11 @@ body {
   max-width: 250px;
   padding: 7px 14px;
   margin-bottom: 15px;
+}
+
+.wrapper-app .wrapper-battlefields-app .wrapper-button .result {
+  padding-bottom: 130px;
+  font-size: 32px;
 }
 
 .wrapper-app .wrapper-battlefields-app .wrapper-button .btn-surrender {

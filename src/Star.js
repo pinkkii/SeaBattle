@@ -6,7 +6,7 @@ class Star{
     constructor(x, y){
         const div = document.createElement("div");
         div.classList.add("star");
-        div.textContent = "*";
+        div.textContent = "•";
 
         Object.assign(this, { x, y, div });
     }

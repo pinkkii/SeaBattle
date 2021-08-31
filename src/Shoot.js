@@ -27,6 +27,7 @@ class Shoot{
         if(this.variant === "miss"){
             this.div.classList.add("shot-missed");
             this.div.textContent = "•";
+            this.div.style.fontSize = `40px`;
         } else if (this.variant === "wounded") {
             this.div.classList.add("shot-wounded");
         } else if (this.variant === "killed") {

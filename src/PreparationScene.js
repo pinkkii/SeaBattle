@@ -41,10 +41,18 @@ class PreparationScene extends Scene{
         const btnManually = document.querySelector(`[data-type="manually"]`);
         const surrender = document.querySelector(`[data-type="surrender"]`);
 
+        let playerStatus = document.querySelector(`[data-status="player"]`);
+        let opponentStatus = document.querySelector(`[data-status="opponent"]`);
+        let status = document.querySelector(".result");
+
+        opponentStatus.style.backgroundColor = `rgba(224, 24, 24, .6)`;
+        playerStatus.style.backgroundColor = `rgba(224, 24, 24, .6)`;
+
         btnPlay.hidden = false;
         btnRandom.hidden = false;
         btnManually.hidden = false;
         surrender.hidden = true;
+        status.hidden = true;
 
         this.removeEventListeners.push(
             addEventListener(btnPlay, "click", () => this.PlayButton())
@@ -84,6 +92,27 @@ class PreparationScene extends Scene{
 
             this.draggedShip.div.style.left = `${x}px`;
             this.draggedShip.div.style.top = `${y}px`;
+
+            // {
+            //     const ship = this.draggedShip;
+            //     const { left, top } = ship.div.getBoundingClientRect();
+            //     const { width, height } = player.cells[0][0].getBoundingClientRect();
+    
+            //     const point = {
+            //         x: left + width / 2,
+            //         y: top + height / 2,
+            //     }
+    
+            //     const cell = player.cells.flat().find((cell) => isUnderPoint(point, cell));
+            //     if (cell) {
+            //         const x = parseInt(cell.dataset.x);
+            //         const y = parseInt(cell.dataset.y);
+            //         cell.style.border = `1px solid red`;
+            //     } else {
+                    
+            //     }
+            // }
+            
         }
 
         // Бросание

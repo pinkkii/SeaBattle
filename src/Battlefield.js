@@ -34,7 +34,6 @@ class Battlefield {
                     free: true,
                     shoot: false,
                     wounded: false,
-
                 }
                 row.push(item);
             }
@@ -81,6 +80,7 @@ class Battlefield {
         for (const { x, y } of this.stars) {
             const item = matrix[y][x];
             item.star = true;
+            item.shoot = true;
         }
 
         this._private_matrix = matrix;
@@ -186,7 +186,7 @@ class Battlefield {
             for (let x = ship.x - 1; x < ship.x + ship.size * dx + dy + 1; x++){
                 if(this.inField(x,y)){
                     const item = this.matrix[y][x];
-                    if(!item.ship && ship.stars === false){
+                    if(!item.ship && !ship.stars && !item.shoot){
                         item.star = true;
 
                         const star = new Star(x, y);
@@ -200,6 +200,7 @@ class Battlefield {
 
                         star.div.style.left = `${cellRect.left - divRect.left}px`;
                         star.div.style.top = `${cellRect.top - divRect.top}px`;
+                        star.div.style.fontSize = `60px`;
                     }
                 }
             }
@@ -379,7 +380,7 @@ class Battlefield {
         this._private_changed = true;
 
         return true;
-     }
+    }
 
     removeShoot(shoot) {
         if (!this.shoots.includes(shoot)) {

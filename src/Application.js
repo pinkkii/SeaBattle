@@ -4,6 +4,7 @@ class Application{
 
     player = null;
     opponent = null;
+    bot = null
 
     scenes = {};
 
@@ -13,7 +14,9 @@ class Application{
         const player = new Battlefield(true);
         const opponent = new Battlefield();
 
-        Object.assign(this, { mouse, player, opponent });
+        let bot = new Bot(player);
+
+        Object.assign(this, { mouse, player, opponent, bot });
             
         document.querySelector('[data-side="player"]')
             .append(player.div);
