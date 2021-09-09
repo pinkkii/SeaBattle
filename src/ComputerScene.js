@@ -53,11 +53,11 @@ class ComputerScene extends Scene{
         if(this.end){
             status.hidden = false;
             if (opponent.loser) {
-                status.textContent = "You win's!!!";
+                status.textContent = "Ты выиграл!!!";
 
             }
             else {
-                status.textContent = "You lose";
+                status.textContent = "Ты проиграл =(";
             }
         }
 

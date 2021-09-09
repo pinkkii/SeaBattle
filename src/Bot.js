@@ -86,7 +86,9 @@ class Bot{
 
         if(this.item.ship && this.item.ship.killed){
             console.log("ЕСЛИ УБИТ ОДНОПАЛУБНИК");
-            this.isSunkOne();
+            // NEEEEEEEW!!!!!
+            this.miss = false;
+            // this.isSunkOne();
         }
     }
 
@@ -196,19 +198,25 @@ class Bot{
         }
 
         if(!this.item.ship){
+            console.log("Промах",this.y,this.x);
+
             this.updateCoord();
             this.miss = true;
-            console.log("Промах",this.y,this.x);
         }
 
         if(this.item.ship && this.item.ship.killed) {
             console.log("ЕСЛИ УБИТ КОРАБЛЬ");
-            this.isSunkOne();
+            // NEEEEEEEW!!!!!
+            this.miss = false;
+            this.discharge();
+            // this.isSunkOne();
         }
     }
     
     isSunkThree(){
         let temp = false;
+        let rightSide = false;
+
         this.miss = false;
 
         this.pX = this.x;
@@ -217,100 +225,170 @@ class Bot{
         let Direction = this.player._private_matrix[this.startY][this.startX].ship.direction;
 
         while (!temp) {
-            let coord = getRandomBetween(0,1);
+            console.log("ТРЕТЬЯ ПАЛУБА, работает цикл WHILE");
 
-            switch(coord){
-                case 0:
-                    if (Direction === "row") {
-                        if (this.x === 9) {
-                            temp = false;
-                        } else{
-                            let x = this.x + 1;
-                            let y = this.y;
-    
-                            this.item = this.player._private_matrix[y][x];
-    
-                            if(!this.item.shoot && !this.item.star)
-                            {
-                                const shoot = new Shoot(x, y);
-                                this.player.addShoot(shoot);    
-        
-                                Object.assign(this, { x, y });
-                                temp = true;
-                                console.log("shoot 3 ПАЛУБА: ",y,x);
-                                console.log("Выстрел по третей палубе ВПРАВО");
-                            }
-                        }
+            if (Direction === "row") {
+                if (this.x === 9) {
+                    let x = this.startX - 1;
+                    let y = this.startY;
+
+                    this.item = this.player._private_matrix[y][x];
+
+                    if(!this.item.shoot && !this.item.star)
+                    {
+                        const shoot = new Shoot(x, y);
+                        this.player.addShoot(shoot);    
+
+                        Object.assign(this, { x, y });
+                        temp = true;
+                        rightSide = true;
+                        console.log("shoot 3 ПАЛУБА: ",y,x);
+                        console.log("Выстрел по третей палубе ВЛЕВО (от начальной позиции)");
                     }
-                    if (Direction === "column") {
-                        if (this.y === 0) {
-                            temp = false;
-                        } else{
-                            let x = this.x;
-                            let y = this.y - 1;
-    
-                            this.item = this.player._private_matrix[y][x];
-    
-                            if(!this.item.shoot && !this.item.star)
-                            {
-                                const shoot = new Shoot(x, y);
-                                this.player.addShoot(shoot);    
-        
-                                Object.assign(this, { x, y });
-                                temp = true;
-                                console.log("shoot 3 ПАЛУБА: ",y,x);
-                                console.log("Выстрел по третей палубе ВВЕРХ");
-                            }
-                        }
+                } else if(this.x === 0){
+                    let x = this.startX + 1;
+                    let y = this.startY;
+
+                    this.item = this.player._private_matrix[y][x];
+
+                    if(!this.item.shoot && !this.item.star)
+                    {
+                        const shoot = new Shoot(x, y);
+                        this.player.addShoot(shoot);    
+
+                        Object.assign(this, { x, y });
+                        temp = true;
+                        rightSide = true;
+                        console.log("shoot 3 ПАЛУБА: ",y,x);
+                        console.log("Выстрел по третей палубе ВПРАВО");
                     }
-                    break;
-                case 1:
-                    if (Direction === "row") {
-                        if (this.x === 0) {
-                            temp = false;
-                        } else{
-                            let x = this.x - 1;
-                            let y = this.y;
-    
-                            this.item = this.player._private_matrix[y][x];
-    
-                            if(!this.item.shoot && !this.item.star)
-                            {
-                                const shoot = new Shoot(x, y);
-                                this.player.addShoot(shoot);    
-        
-                                Object.assign(this, { x, y });
-                                temp = true;
-                                console.log("shoot 3 ПАЛУБА: ",y,x);
-                                console.log("Выстрел по третей палубе ВЛЕВО");
-                            }
-                        }
+                } else{
+                    let x = this.x + 1;
+                    let y = this.y;
+
+                    this.item = this.player._private_matrix[y][x];
+
+                    if(!this.item.shoot && !this.item.star)
+                    {
+                        const shoot = new Shoot(x, y);
+                        this.player.addShoot(shoot);    
+
+                        Object.assign(this, { x, y });
+                        temp = true;
+                        rightSide = true;
+                        console.log("shoot 3 ПАЛУБА: ",y,x);
+                        console.log("Выстрел по третей палубе ВПРАВО");
                     }
-                    if (Direction === "column") {
-                        if (this.y === 9) {
-                            temp = false;
-                        } else{
-                            let x = this.x;
-                            let y = this.y + 1;
-    
-                            this.item = this.player._private_matrix[y][x];
-    
-                            if(!this.item.shoot && !this.item.star)
-                            {
-                                const shoot = new Shoot(x, y);
-                                this.player.addShoot(shoot);    
-        
-                                Object.assign(this, { x, y });
-                                temp = true;
-                                console.log("shoot 3 ПАЛУБА: ",y,x);
-                                console.log("Выстрел по третей палубе ВНИЗ");
-                            }
-                        }
+
+                    if (!this.item.ship) {
+                        this.x = this.startX;
+                        this.y = this.startY;
+                        rightSide = false;
                     }
-                    break;
-                default:
-                    console.log("isSunkTwo default");
-                    break;
+                }
+            }
+            if (Direction === "column") {
+                if (this.y === 9) {
+                    let x = this.startX;
+                    let y = this.startY - 1;
+
+                    this.item = this.player._private_matrix[y][x];
+
+                    if(!this.item.shoot && !this.item.star)
+                    {
+                        const shoot = new Shoot(x, y);
+                        this.player.addShoot(shoot);    
+
+                        Object.assign(this, { x, y });
+                        temp = true;
+                        rightSide = true;
+                        console.log("shoot 3 ПАЛУБА: ",y,x);
+                        console.log("Выстрел по третей палубе ВЛЕВО (от начальной позиции)");
+                    }
+                } else if(this.y === 0){
+                    let x = this.startX;
+                    let y = this.startY + 1;
+
+                    this.item = this.player._private_matrix[y][x];
+
+                    if(!this.item.shoot && !this.item.star)
+                    {
+                        const shoot = new Shoot(x, y);
+                        this.player.addShoot(shoot);    
+
+                        Object.assign(this, { x, y });
+                        temp = true;
+                        rightSide = true;
+                        console.log("shoot 3 ПАЛУБА: ",y,x);
+                        console.log("Выстрел по третей палубе ВПРАВО");
+                    }
+                } else{
+                    let x = this.x;
+                    let y = this.y + 1;
+
+                    this.item = this.player._private_matrix[y][x];
+
+                    if(!this.item.shoot && !this.item.star)
+                    {
+                        const shoot = new Shoot(x, y);
+                        this.player.addShoot(shoot);    
+
+                        Object.assign(this, { x, y });
+                        temp = true;
+                        rightSide = true;
+                        console.log("shoot 3 ПАЛУБА: ",y,x);
+                        console.log("Выстрел по третей палубе ВПРАВО");
+                    }
+
+                    if (!this.item.ship) {
+                        this.x = this.startX;
+                        this.y = this.startY;
+                        rightSide = false;
+                    }
+
+                }
+            }
+            /////////////---Если выстрел в право был НЕ успешен---/////////////
+
+            if (rightSide === false) {
+                if (Direction === "row") {
+                    let x = this.x - 1;
+                    let y = this.y;
+    
+                    this.item = this.player._private_matrix[y][x];
+    
+                    if(!this.item.shoot && !this.item.star) {
+                        const shoot = new Shoot(x, y);
+                        this.player.addShoot(shoot);    
+    
+                        Object.assign(this, { x, y });
+                        temp = true;
+                        console.log("shoot 3 ПАЛУБА: ",y,x);
+                        console.log("Выстрел по третей палубе ВЛЕВО");
+                    } else if (!this.item.ship) {
+                        this.x = this.startX;
+                        this.y = this.startY;
+                    }
+                }
+                if (Direction === "column") {
+                    let x = this.x;
+                    let y = this.y - 1;
+    
+                    this.item = this.player._private_matrix[y][x];
+    
+                    if(!this.item.shoot && !this.item.star) {
+                        const shoot = new Shoot(x, y);
+                        this.player.addShoot(shoot);    
+    
+                        Object.assign(this, { x, y });
+                        temp = true;
+                        console.log("shoot 3 ПАЛУБА: ",y,x);
+                        console.log("Выстрел по третей палубе ВЛЕВО");
+                    } else if (!this.item.ship) {
+                        this.x = this.startX;
+                        this.y = this.startY;
+                    }
+                }
             }
         }
 
@@ -328,13 +406,16 @@ class Bot{
 
         if(this.item.ship && this.item.ship.killed) {
             console.log("ЕСЛИ УБИТ КОРАБЛЬ");
-            this.isSunkOne();
+            // NEEEEEEEW!!!!!
+            this.miss = false;
+            this.discharge();
+            // this.isSunkOne();
         }
     }
 
     isSunkFour(){
         let temp = false;
-
+        let rightSide = false;
         this.miss = false;
         
         this.pX = this.x;
@@ -342,100 +423,169 @@ class Bot{
         let Direction = this.player._private_matrix[this.startY][this.startX].ship.direction;
 
         while (!temp) {
-            let coord = getRandomBetween(0,1);
+            console.log("ЧЕТВЕРТАЯ ПАЛУБА, работает цикл WHILE");
+            if (Direction === "row") {
+                if (this.x === 9) {
+                    let x = this.startX - 1;
+                    let y = this.startY;
 
-            switch(coord){
-                case 0:
-                    if (Direction === "row") {
-                        if (this.x === 9) {
-                            temp = false;
-                        } else{
-                            let x = this.x + 1;
-                            let y = this.y;
-    
-                            this.item = this.player._private_matrix[y][x];
-    
-                            if(!this.item.shoot && !this.item.star)
-                            {
-                                const shoot = new Shoot(x, y);
-                                this.player.addShoot(shoot);    
-        
-                                Object.assign(this, { x, y });
-                                temp = true;
-                                console.log("shoot 4 ПАЛУБА: ",y,x);
-                                console.log("Выстрел по 4 палубе ВПРАВО");
-                            }
-                        }
+                    this.item = this.player._private_matrix[y][x];
+
+                    if(!this.item.shoot && !this.item.star)
+                    {
+                        const shoot = new Shoot(x, y);
+                        this.player.addShoot(shoot);    
+
+                        Object.assign(this, { x, y });
+                        temp = true;
+                        rightSide = true;
+                        console.log("shoot 4 ПАЛУБА: ",y,x);
+                        console.log("Выстрел по четвертой палубе ВЛЕВО (от начальной позиции)");
                     }
-                    if (Direction === "column") {
-                        if (this.y === 0) {
-                            temp = false;
-                        } else{
-                            let x = this.x;
-                            let y = this.y - 1;
-    
-                            this.item = this.player._private_matrix[y][x];
-    
-                            if(!this.item.shoot && !this.item.star)
-                            {
-                                const shoot = new Shoot(x, y);
-                                this.player.addShoot(shoot);    
-        
-                                Object.assign(this, { x, y });
-                                temp = true;
-                                console.log("shoot 4 ПАЛУБА: ",y,x);
-                                console.log("Выстрел по 4 палубе ВВЕРХ");
-                            }
-                        }
+                } else if(this.x === 0){
+                    let x = this.startX + 1;
+                    let y = this.startY;
+
+                    this.item = this.player._private_matrix[y][x];
+
+                    if(!this.item.shoot && !this.item.star)
+                    {
+                        const shoot = new Shoot(x, y);
+                        this.player.addShoot(shoot);    
+
+                        Object.assign(this, { x, y });
+                        temp = true;
+                        rightSide = true;
+                        console.log("shoot 4 ПАЛУБА: ",y,x);
+                        console.log("Выстрел по четвертой палубе ВПРАВО");
                     }
-                    break;
-                case 1:
-                    if (Direction === "row") {
-                        if (this.x === 0) {
-                            temp = false;
-                        } else{
-                            let x = this.x - 1;
-                            let y = this.y;
-    
-                            this.item = this.player._private_matrix[y][x];
-    
-                            if(!this.item.shoot && !this.item.star)
-                            {
-                                const shoot = new Shoot(x, y);
-                                this.player.addShoot(shoot);    
-        
-                                Object.assign(this, { x, y });
-                                temp = true;
-                                console.log("shoot 4 ПАЛУБА: ",y,x);
-                                console.log("Выстрел по 4 палубе ВЛЕВО");
-                            }
-                        }
+                } else{
+                    let x = this.x + 1;
+                    let y = this.y;
+
+                    this.item = this.player._private_matrix[y][x];
+
+                    if(!this.item.shoot && !this.item.star)
+                    {
+                        const shoot = new Shoot(x, y);
+                        this.player.addShoot(shoot);    
+
+                        Object.assign(this, { x, y });
+                        temp = true;
+                        rightSide = true;
+                        console.log("shoot 4 ПАЛУБА: ",y,x);
+                        console.log("Выстрел по четвертой палубе ВПРАВО");
                     }
-                    if (Direction === "column") {
-                        if (this.y === 9) {
-                            temp = false;
-                        } else{
-                            let x = this.x;
-                            let y = this.y + 1;
-    
-                            this.item = this.player._private_matrix[y][x];
-    
-                            if(!this.item.shoot && !this.item.star)
-                            {
-                                const shoot = new Shoot(x, y);
-                                this.player.addShoot(shoot);    
-        
-                                Object.assign(this, { x, y });
-                                temp = true;
-                                console.log("shoot 4 ПАЛУБА: ",y,x);
-                                console.log("Выстрел по 4 палубе ВНИЗ");
-                            }
-                        }
+
+                    if (!this.item.ship) {
+                        this.x = this.startX;
+                        this.y = this.startY;
+                        rightSide = false;
                     }
-                    break;
-                default:
-                    console.log("isSunkTwo default");
-                    break;
+                }
+            }
+            if (Direction === "column") {
+                if (this.y === 9) {
+                    let x = this.startX;
+                    let y = this.startY - 1;
+
+                    this.item = this.player._private_matrix[y][x];
+
+                    if(!this.item.shoot && !this.item.star)
+                    {
+                        const shoot = new Shoot(x, y);
+                        this.player.addShoot(shoot);    
+
+                        Object.assign(this, { x, y });
+                        temp = true;
+                        rightSide = true;
+                        console.log("shoot 4 ПАЛУБА: ",y,x);
+                        console.log("Выстрел по четвертой палубе ВЛЕВО (от начальной позиции)");
+                    }
+                } else if(this.y === 0){
+                    let x = this.startX;
+                    let y = this.startY + 1;
+
+                    this.item = this.player._private_matrix[y][x];
+
+                    if(!this.item.shoot && !this.item.star)
+                    {
+                        const shoot = new Shoot(x, y);
+                        this.player.addShoot(shoot);    
+
+                        Object.assign(this, { x, y });
+                        temp = true;
+                        rightSide = true;
+                        console.log("shoot 4 ПАЛУБА: ",y,x);
+                        console.log("Выстрел по четвертой палубе ВПРАВО");
+                    }
+                } else{
+                    let x = this.x;
+                    let y = this.y + 1;
+
+                    this.item = this.player._private_matrix[y][x];
+
+                    if(!this.item.shoot && !this.item.star)
+                    {
+                        const shoot = new Shoot(x, y);
+                        this.player.addShoot(shoot);    
+
+                        Object.assign(this, { x, y });
+                        temp = true;
+                        rightSide = true;
+                        console.log("shoot 4 ПАЛУБА: ",y,x);
+                        console.log("Выстрел по четвертой палубе ВПРАВО");
+                    }
+
+                    if (!this.item.ship) {
+                        this.x = this.startX;
+                        this.y = this.startY;
+                        rightSide = false;
+                    }
+
+                }
+            }
+            /////////////---Если выстрел в право был НЕ успешен---/////////////
+
+            if (rightSide === false) {
+                if (Direction === "row") {
+                    let x = this.x - 1;
+                    let y = this.y;
+    
+                    this.item = this.player._private_matrix[y][x];
+    
+                    if(!this.item.shoot && !this.item.star) {
+                        const shoot = new Shoot(x, y);
+                        this.player.addShoot(shoot);    
+    
+                        Object.assign(this, { x, y });
+                        temp = true;
+                        console.log("shoot 4 ПАЛУБА: ",y,x);
+                        console.log("Выстрел по четвертой палубе ВЛЕВО");
+                    } else if (!this.item.ship) {
+                        this.x = this.startX;
+                        this.y = this.startY;
+                    }
+                }
+                if (Direction === "column") {
+                    let x = this.x;
+                    let y = this.y - 1;
+    
+                    this.item = this.player._private_matrix[y][x];
+    
+                    if(!this.item.shoot && !this.item.star) {
+                        const shoot = new Shoot(x, y);
+                        this.player.addShoot(shoot);    
+    
+                        Object.assign(this, { x, y });
+                        temp = true;
+                        console.log("shoot 4 ПАЛУБА: ",y,x);
+                        console.log("Выстрел по четвертой палубе ВЛЕВО");
+                    } else if (!this.item.ship) {
+                        this.x = this.startX;
+                        this.y = this.startY;
+                    }
+                }
             }
         }
 
@@ -449,7 +599,8 @@ class Bot{
         if(this.item.ship && this.item.ship.killed) {
             console.log("ЕСЛИ УБИТ КОРАБЛЬ");
             this.miss = false;
-            this.isSunkOne();
+            this.discharge();
+            // this.isSunkOne();
         }
     }
 
