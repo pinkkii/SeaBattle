@@ -86,9 +86,7 @@ class Bot{
 
         if(this.item.ship && this.item.ship.killed){
             console.log("ЕСЛИ УБИТ ОДНОПАЛУБНИК");
-            // NEEEEEEEW!!!!!
             this.miss = false;
-            // this.isSunkOne();
         }
     }
 
@@ -206,10 +204,8 @@ class Bot{
 
         if(this.item.ship && this.item.ship.killed) {
             console.log("ЕСЛИ УБИТ КОРАБЛЬ");
-            // NEEEEEEEW!!!!!
             this.miss = false;
             this.discharge();
-            // this.isSunkOne();
         }
     }
     
@@ -348,7 +344,7 @@ class Bot{
 
                 }
             }
-            /////////////---Если выстрел в право был НЕ успешен---/////////////
+            /////////////---Если выстрел НЕ успешен---/////////////
 
             if (rightSide === false) {
                 if (Direction === "row") {
@@ -406,10 +402,8 @@ class Bot{
 
         if(this.item.ship && this.item.ship.killed) {
             console.log("ЕСЛИ УБИТ КОРАБЛЬ");
-            // NEEEEEEEW!!!!!
             this.miss = false;
             this.discharge();
-            // this.isSunkOne();
         }
     }
 
@@ -545,7 +539,7 @@ class Bot{
 
                 }
             }
-            /////////////---Если выстрел в право был НЕ успешен---/////////////
+            /////////////---Если выстрел НЕ успешен---/////////////
 
             if (rightSide === false) {
                 if (Direction === "row") {
@@ -600,7 +594,6 @@ class Bot{
             console.log("ЕСЛИ УБИТ КОРАБЛЬ");
             this.miss = false;
             this.discharge();
-            // this.isSunkOne();
         }
     }
 

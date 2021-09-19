@@ -21,6 +21,7 @@ class ComputerScene extends Scene{
         const btnManually = document.querySelector(`[data-type="manually"]`).hidden = true;
         const surrender = document.querySelector(`[data-type="surrender"]`);
 
+        surrender.textContent = "Сдаться";
         surrender.hidden = false;
         
         this.removeEventListeners.push(
@@ -59,6 +60,7 @@ class ComputerScene extends Scene{
             else {
                 status.textContent = "Ты проиграл =(";
             }
+            document.querySelector(`[data-type="surrender"]`).textContent = "Вернуться в главное меню";
         }
 
         if(!this.end){

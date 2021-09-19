@@ -11,7 +11,7 @@ body, .btn-app {
 }
 
 body {
-  background: url("/src/img/backbround_img.jpg") right;
+  background: #d3cece;
   width: 100vw;
   height: 100vh;
 }

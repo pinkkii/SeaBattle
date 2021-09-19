@@ -4,10 +4,11 @@ class Battlefield {
 
     dock = null;        // хранятся все div-ы кораблей
     polygon = null;     // хранятся все div-ы выстрелов
-    dockStars = null; //  хранятся все div-ы звёздочек
+    dockStars = null;   // хранятся все div-ы звёздочек
 
     cells = [];
     ships = [];
+    shadowShip = [];    // массив тени(одной) корабля - так надо, по другому не придумал =)
     shoots = [];
     stars = [];
 
@@ -320,6 +321,50 @@ class Battlefield {
             this.removeShip(ship);
         }
 
+        return true;
+    }
+
+    addShadowShip(shadow, x, y){
+        if (this.shadowShip.includes(shadow) ) {
+            return false;
+        }
+
+        this.shadowShip.push(shadow);
+
+    
+
+        this.div.append(shadow.div);
+
+        if(shadow.placed){
+            const cell = this.cells[y][x];
+            const cellRect = cell.getBoundingClientRect();
+            const battlefieldRect = this.div.getBoundingClientRect();
+
+            shadow.div.style.left = `${cellRect.left - battlefieldRect.left}px`;
+            shadow.div.style.top = `${cellRect.top - battlefieldRect.top}px`;
+        }
+
+        this._private_changed = true;
+        return true;
+    }
+
+    removeShadow(shadowShip){
+        // if (!this.shadowShip.includes(shadowShip)) {
+        //     return false;
+        // }
+
+        // const index = this.shadowShip.indexOf(shadowShip);
+        // this.shadowShip.splice(index, 1);
+
+        //shadowShip.x = null;
+        //shadowShip.y = null;
+        this.shadowShip = [];
+
+        if(Array.prototype.includes.call(this.div.children, shadowShip.dsiv)){
+            shadowShip.div.remove();
+        }
+
+        this._private_changed = true;
         return true;
     }
 
