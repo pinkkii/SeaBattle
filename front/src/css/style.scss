@@ -20,6 +20,19 @@ body{
 	margin: 0 auto;
 	margin-top: 50px;
 	padding: 10px;
+
+	.wrapper-info{
+		display: flex;
+		flex-direction: column;
+		margin: 0 auto;
+		text-align: center;
+		.text-info{
+			padding: 10px;
+		}
+		.battle-status{
+			min-height: 16px;
+		}
+	}
 	.wrapper-battlefields-app{
 		display: flex;
 		flex-direction: row;
@@ -69,6 +82,8 @@ body{
 			justify-content: flex-end;
 			align-items: center;
 			padding: 40px;
+			width: 330px;
+			max-height: 401px;
 			.btn-app{
 				border-radius: 5px;
 				font-size:medium;

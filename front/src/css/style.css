@@ -23,6 +23,26 @@ body {
   padding: 10px;
 }
 
+.wrapper-app .wrapper-info {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.wrapper-app .wrapper-info .text-info {
+  padding: 10px;
+}
+
+.wrapper-app .wrapper-info .battle-status {
+  min-height: 16px;
+}
+
 .wrapper-app .wrapper-battlefields-app {
   display: -webkit-box;
   display: -ms-flexbox;
@@ -104,6 +124,8 @@ body {
       -ms-flex-align: center;
           align-items: center;
   padding: 40px;
+  width: 330px;
+  max-height: 401px;
 }
 
 .wrapper-app .wrapper-battlefields-app .wrapper-button .btn-app {

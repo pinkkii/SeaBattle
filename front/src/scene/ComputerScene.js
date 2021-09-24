@@ -20,12 +20,14 @@ class ComputerScene extends Scene{
         const btnRandom = document.querySelector(`[data-type="random"]`).hidden = true;
         const btnManually = document.querySelector(`[data-type="manually"]`).hidden = true;
         const surrender = document.querySelector(`[data-type="surrender"]`);
+        const btnRandomPlayer = document.querySelector(`[data-type="randomPlayer"]`);
 
         surrender.textContent = "Сдаться";
         surrender.hidden = false;
+        btnRandomPlayer.hidden = true;
         
         this.removeEventListeners.push(
-            addEventListener(surrender, "click", () => this.surrenderFunc())
+            addListener(surrender, "click", () => this.surrenderFunc())
         );
     }
 

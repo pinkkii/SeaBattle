@@ -10,12 +10,17 @@
 </head>
 <body>
 	<div class="wrapper-app">
+		<div class="wrapper-info">
+			<p class="text-info"> <span data-playersCount>0</span> игроков онлайн</p>
+			<span class="battle-status"></span>
+		</div>
 		<div class="wrapper-battlefields-app">
 			<div data-side="player">
 				<h1 class="item" data-status="player">Моё поле</h1>
 			</div>
 			<div class="wrapper-button">
 				<button class="btn-app" data-type="play" disabled>Играть против бота</button>
+				<button class="btn-app" data-type="randomPlayer" disabled>Играть против случайного игрока</button>
 				<button class="btn-app" data-type="random">Расставить корабли в случайном порядке</button>
 				<button class="btn-app" data-type="manually">Расставить корабли вручную</button>
 				<div class="result" hidden></div>
@@ -33,9 +38,10 @@
 	
 	<script src="./src/Application.js"></script>
 
-	<script src="./src/Scene.js"></script>
-	<script src="./src/PreparationScene.js"></script>
-	<script src="./src/ComputerScene.js"></script>
+	<script src="./src/scene/Scene.js"></script>
+	<script src="./src/scene/PreparationScene.js"></script>
+	<script src="./src/scene/ComputerScene.js"></script>
+	<script src="./src/scene/OnlineScene.js"></script>
 	
 	<script src="./src/Battlefield.js"></script>
 
@@ -46,6 +52,7 @@
 	<script src="./src/Bot.js"></script>
 	<script src="./src/Star.js"></script>
 
+	<script src="/socket.io/socket.io.js"></script>
 	<script src="./src/script.js"></script>
 </body>
 </html>

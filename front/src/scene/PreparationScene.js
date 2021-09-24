@@ -41,6 +41,8 @@ class PreparationScene extends Scene{
         const btnRandom = document.querySelector(`[data-type="random"]`);
         const btnManually = document.querySelector(`[data-type="manually"]`);
         const surrender = document.querySelector(`[data-type="surrender"]`);
+        const btnRandomPlayer = document.querySelector(`[data-type="randomPlayer"]`);
+
 
         let playerStatus = document.querySelector(`[data-status="player"]`);
         let opponentStatus = document.querySelector(`[data-status="opponent"]`);
@@ -54,20 +56,23 @@ class PreparationScene extends Scene{
         btnManually.hidden = false;
         surrender.hidden = true;
         status.hidden = true;
+        btnRandomPlayer.hidden = false;
 
         this.removeEventListeners.push(
-            addEventListener(btnPlay, "click", () => this.PlayButton())
+            addListener(btnPlay, "click", () => this.PlayButton())
         );
 
         this.removeEventListeners.push(
-            addEventListener(btnRandom, "click", () => this.RandomPlaceShips())
+            addListener(btnRandom, "click", () => this.RandomPlaceShips())
         );
 
         this.removeEventListeners.push(
-            addEventListener(btnManually, "click", () => this.manually())
+            addListener(btnManually, "click", () => this.manually())
         );
 
-
+        this.removeEventListeners.push(
+            addListener(btnRandomPlayer, "click", () => this.app.start("online", "random"))
+        );
     }
 
     update(){
@@ -94,28 +99,28 @@ class PreparationScene extends Scene{
             this.draggedShip.div.style.left = `${x}px`;
             this.draggedShip.div.style.top = `${y}px`;
 
-            {
-                const ship = this.draggedShip;
-                const { left, top } = ship.div.getBoundingClientRect();
-                const { width, height } = player.cells[0][0].getBoundingClientRect();
+            // {
+            //     const ship = this.draggedShip;
+            //     const { left, top } = ship.div.getBoundingClientRect();
+            //     const { width, height } = player.cells[0][0].getBoundingClientRect();
     
-                const point = {
-                    x: left + width / 2,
-                    y: top + height / 2,
-                }
+            //     const point = {
+            //         x: left + width / 2,
+            //         y: top + height / 2,
+            //     }
     
-                const cell = player.cells.flat().find((cell) => isUnderPoint(point, cell));
-                if (cell) {
-                    const x = parseInt(cell.dataset.x);
-                    const y = parseInt(cell.dataset.y);
-                    // cell.style.backgroundColor = `red`;
-                    const shadowShip = new ShadowShip(ship.size,ship.direction);
-                    this.shadowShip = shadowShip;
-                    player.addShadowShip(shadowShip, x, y);
-                } else {
-                    player.removeShadow(this.shadowShip);
-                }
-            }
+            //     const cell = player.cells.flat().find((cell) => isUnderPoint(point, cell));
+            //     if (cell) {
+            //         const x = parseInt(cell.dataset.x);
+            //         const y = parseInt(cell.dataset.y);
+            //         // cell.style.backgroundColor = `red`;
+            //         const shadowShip = new ShadowShip(ship.size,ship.direction);
+            //         this.shadowShip = shadowShip;
+            //         player.addShadowShip(shadowShip, x, y);
+            //     } else {
+            //         player.removeShadow(this.shadowShip);
+            //     }
+            // }
         }
 
         // Бросание
@@ -153,8 +158,10 @@ class PreparationScene extends Scene{
         //если все корабли расставлены, включается кнопка БОЯ
         if (player.allShipsPlaced) {
             document.querySelector(`[data-type="play"]`).disabled = false;
+            document.querySelector(`[data-type="randomPlayer"]`).disabled = false;
         } else {
             document.querySelector(`[data-type="play"]`).disabled = true;
+            document.querySelector(`[data-type="randomPlayer"]`).disabled = true;
         }
 
     }
@@ -197,6 +204,4 @@ class PreparationScene extends Scene{
         this.stop();
         this.app.start("computer");
     }
-
-
 }

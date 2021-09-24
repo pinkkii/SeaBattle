@@ -1,4 +1,5 @@
 class Application{
+    socket = null;
     mouse = null;
     activeScene = null;
 
@@ -14,9 +15,11 @@ class Application{
         const player = new Battlefield(true);
         const opponent = new Battlefield();
 
+        const socket = io();
+
         let bot = new Bot(player);
 
-        Object.assign(this, { mouse, player, opponent, bot });
+        Object.assign(this, { mouse, player, opponent, bot, socket });
             
         document.querySelector('[data-side="player"]')
             .append(player.div);
@@ -30,6 +33,10 @@ class Application{
         for(const scene of Object.values(this.scenes)){
             scene.init();
         }
+
+        socket.on("playerCount", (n) => {
+        document.querySelector("[data-playersCount]").textContent = n;
+        });
        
         requestAnimationFrame(() => this.tick());
     }
