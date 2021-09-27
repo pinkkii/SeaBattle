@@ -63,7 +63,7 @@ class Bot{
                 shoted = false;
             } else {
                 shoted = true;
-                const shoot = new Shoot(x, y);
+                const shoot = new ShootView(x, y);
                 this.player.addShoot(shoot);
                 console.log("shoot 1 ПАЛУБА: ",y,x);
             }
@@ -111,7 +111,7 @@ class Bot{
 
                         if(!this.item.shoot && !this.item.star)
                         {
-                            const shoot = new Shoot(x, y);
+                            const shoot = new ShootView(x, y);
                             this.player.addShoot(shoot);    
     
                             Object.assign(this, { x, y });
@@ -132,7 +132,7 @@ class Bot{
 
                         if(!this.item.shoot && !this.item.star)
                         {
-                            const shoot = new Shoot(x, y);
+                            const shoot = new ShootView(x, y);
                             this.player.addShoot(shoot);    
     
                             Object.assign(this, { x, y });
@@ -153,7 +153,7 @@ class Bot{
 
                         if(!this.item.shoot && !this.item.star)
                         {
-                            const shoot = new Shoot(x, y);
+                            const shoot = new ShootView(x, y);
                             this.player.addShoot(shoot);    
     
                             Object.assign(this, { x, y });
@@ -174,7 +174,7 @@ class Bot{
 
                         if(!this.item.shoot && !this.item.star)
                         {
-                            const shoot = new Shoot(x, y);
+                            const shoot = new ShootView(x, y);
                             this.player.addShoot(shoot);    
     
                             Object.assign(this, { x, y });
@@ -232,7 +232,7 @@ class Bot{
 
                     if(!this.item.shoot && !this.item.star)
                     {
-                        const shoot = new Shoot(x, y);
+                        const shoot = new ShootView(x, y);
                         this.player.addShoot(shoot);    
 
                         Object.assign(this, { x, y });
@@ -249,7 +249,7 @@ class Bot{
 
                     if(!this.item.shoot && !this.item.star)
                     {
-                        const shoot = new Shoot(x, y);
+                        const shoot = new ShootView(x, y);
                         this.player.addShoot(shoot);    
 
                         Object.assign(this, { x, y });
@@ -266,7 +266,7 @@ class Bot{
 
                     if(!this.item.shoot && !this.item.star)
                     {
-                        const shoot = new Shoot(x, y);
+                        const shoot = new ShootView(x, y);
                         this.player.addShoot(shoot);    
 
                         Object.assign(this, { x, y });
@@ -292,7 +292,7 @@ class Bot{
 
                     if(!this.item.shoot && !this.item.star)
                     {
-                        const shoot = new Shoot(x, y);
+                        const shoot = new ShootView(x, y);
                         this.player.addShoot(shoot);    
 
                         Object.assign(this, { x, y });
@@ -309,7 +309,7 @@ class Bot{
 
                     if(!this.item.shoot && !this.item.star)
                     {
-                        const shoot = new Shoot(x, y);
+                        const shoot = new ShootView(x, y);
                         this.player.addShoot(shoot);    
 
                         Object.assign(this, { x, y });
@@ -326,7 +326,7 @@ class Bot{
 
                     if(!this.item.shoot && !this.item.star)
                     {
-                        const shoot = new Shoot(x, y);
+                        const shoot = new ShootView(x, y);
                         this.player.addShoot(shoot);    
 
                         Object.assign(this, { x, y });
@@ -354,7 +354,7 @@ class Bot{
                     this.item = this.player._private_matrix[y][x];
     
                     if(!this.item.shoot && !this.item.star) {
-                        const shoot = new Shoot(x, y);
+                        const shoot = new ShootView(x, y);
                         this.player.addShoot(shoot);    
     
                         Object.assign(this, { x, y });
@@ -373,7 +373,7 @@ class Bot{
                     this.item = this.player._private_matrix[y][x];
     
                     if(!this.item.shoot && !this.item.star) {
-                        const shoot = new Shoot(x, y);
+                        const shoot = new ShootView(x, y);
                         this.player.addShoot(shoot);    
     
                         Object.assign(this, { x, y });
@@ -427,7 +427,7 @@ class Bot{
 
                     if(!this.item.shoot && !this.item.star)
                     {
-                        const shoot = new Shoot(x, y);
+                        const shoot = new ShootView(x, y);
                         this.player.addShoot(shoot);    
 
                         Object.assign(this, { x, y });
@@ -444,7 +444,7 @@ class Bot{
 
                     if(!this.item.shoot && !this.item.star)
                     {
-                        const shoot = new Shoot(x, y);
+                        const shoot = new ShootView(x, y);
                         this.player.addShoot(shoot);    
 
                         Object.assign(this, { x, y });
@@ -461,7 +461,7 @@ class Bot{
 
                     if(!this.item.shoot && !this.item.star)
                     {
-                        const shoot = new Shoot(x, y);
+                        const shoot = new ShootView(x, y);
                         this.player.addShoot(shoot);    
 
                         Object.assign(this, { x, y });
@@ -487,7 +487,7 @@ class Bot{
 
                     if(!this.item.shoot && !this.item.star)
                     {
-                        const shoot = new Shoot(x, y);
+                        const shoot = new ShootView(x, y);
                         this.player.addShoot(shoot);    
 
                         Object.assign(this, { x, y });
@@ -504,7 +504,7 @@ class Bot{
 
                     if(!this.item.shoot && !this.item.star)
                     {
-                        const shoot = new Shoot(x, y);
+                        const shoot = new ShootView(x, y);
                         this.player.addShoot(shoot);    
 
                         Object.assign(this, { x, y });
@@ -521,7 +521,7 @@ class Bot{
 
                     if(!this.item.shoot && !this.item.star)
                     {
-                        const shoot = new Shoot(x, y);
+                        const shoot = new ShootView(x, y);
                         this.player.addShoot(shoot);    
 
                         Object.assign(this, { x, y });
@@ -549,7 +549,7 @@ class Bot{
                     this.item = this.player._private_matrix[y][x];
     
                     if(!this.item.shoot && !this.item.star) {
-                        const shoot = new Shoot(x, y);
+                        const shoot = new ShootView(x, y);
                         this.player.addShoot(shoot);    
     
                         Object.assign(this, { x, y });
@@ -568,7 +568,7 @@ class Bot{
                     this.item = this.player._private_matrix[y][x];
     
                     if(!this.item.shoot && !this.item.star) {
-                        const shoot = new Shoot(x, y);
+                        const shoot = new ShootView(x, y);
                         this.player.addShoot(shoot);    
     
                         Object.assign(this, { x, y });

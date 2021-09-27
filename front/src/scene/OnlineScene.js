@@ -1,5 +1,6 @@
 class OnlineScene extends Scene{
     status = "";
+    ownTurn = false;
 
     init() {
         const { socket } = this.app;
@@ -9,6 +10,11 @@ class OnlineScene extends Scene{
             this.statusUpdate();
         });
 
+        socket.on("partyStart", (ownTurn) => {
+            this.ownTurn = ownTurn;
+            this.status = "play";
+            this.statusUpdate();
+        });
         this.statusUpdate();
     }
 
@@ -37,6 +43,8 @@ class OnlineScene extends Scene{
             divStatus.textContent = "";
         } else if (this.status === "randomFinding") {
             divStatus.textContent = "Поиск случайного соперника";
+        } else if (this.status === "play") {
+            divStatus.textContent = this.ownTurn ? "Ваш ход" : "Ход соперника";
         }
     }
 }

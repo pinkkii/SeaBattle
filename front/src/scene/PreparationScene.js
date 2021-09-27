@@ -181,7 +181,7 @@ class PreparationScene extends Scene{
         player.removeAllShips();
 
         for (const { size, direction, startX, startY } of ShipDatas) {
-            const ship = new Ship(size, direction, startX, startY);
+            const ship = new ShipView(size, direction, startX, startY);
             player.addShip(ship);
         }
     }

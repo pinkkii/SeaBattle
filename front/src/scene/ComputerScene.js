@@ -94,10 +94,10 @@ class ComputerScene extends Scene{
                     if (cell && !item.star && !item.shoot) {
                         const ship = opponent.ships.find((ship) => ship.isUnder(mouse));
                         if (ship) {
-                            const shoot = new Shoot(x, y);
+                            const shoot = new ShootView(x, y);
                             opponent.addShoot(shoot);
                         } else {
-                            const shoot = new Shoot(x, y, "miss");
+                            const shoot = new ShootView(x, y, "miss");
                             opponent.addShoot(shoot);
                             this.turnPlayer = false;
                         }

@@ -1,4 +1,4 @@
-class Shoot{
+module.exports = class Shoot{
     x = null;
     y = null;
     variant = null;

@@ -1,18 +1,7 @@
 class Battlefield {
-    div = null;
-    table = null;
-
-    dock = null;        // хранятся все div-ы кораблей
-    polygon = null;     // хранятся все div-ы выстрелов
-    dockStars = null;   // хранятся все div-ы звёздочек
-
-    cells = [];
     ships = [];
-    shadowShip = [];    // массив тени(одной) корабля - так надо, по другому не придумал =)
     shoots = [];
     stars = [];
-
-    showShip = true;
 
     _private_matrix = null;
     _private_changed = true;
@@ -81,7 +70,6 @@ class Battlefield {
         for (const { x, y } of this.stars) {
             const item = matrix[y][x];
             item.star = true;
-            item.shoot = true;
         }
 
         this._private_matrix = matrix;
@@ -119,58 +107,6 @@ class Battlefield {
         }
         return true;
     }
-    
-    constructor(showShip = true){
-        const table = document.createElement("table");
-        const div = document.createElement("div");
-        div.classList.add("battlefield");
-
-        const dock = document.createElement("div");
-        dock.classList.add("battlefield-dock");
-
-        const polygon = document.createElement("div");
-        polygon.classList.add("battlefield-polygon");
-
-        const dockStars = document.createElement("div");
-        dockStars.classList.add("Stars");
-
-        Object.assign(this, { table, div, dock, showShip, polygon, dockStars });
-
-        for(let y = 0; y < 10; y++){
-            const row = [];
-            let tr = document.createElement("tr");
-            tr.dataset.y = y;
-            for (let x = 0; x < 10; x++) {
-                let td = document.createElement("td");
-                td.dataset.y = y;
-                td.dataset.x = x;
-                tr.append(td);
-                row.push(td);
-            }
-            table.append(tr);
-            this.cells.push(row);
-        }
-
-        div.append(table, dock, polygon, dockStars);
-
-        for (let x = 0; x < 10; x++) {
-            const cell = this.cells[0][x];
-            const marker = document.createElement("div");
-
-            marker.classList.add("marker", "marker-row");
-            marker.textContent = "АБВГДЕЖЗИК"[x];
-            cell.append(marker);
-        }
-
-        for (let y = 0; y < 10; y++) {
-            const cell = this.cells[y][0];
-            const marker = document.createElement("div");
-
-            marker.classList.add("marker", "marker-column");
-            marker.textContent = y + 1;
-            cell.append(marker);
-        }
-    }
 
     addStars(ship){
         for (const { x, y } of this.stars) {
@@ -190,18 +126,9 @@ class Battlefield {
                     if(!item.ship && !ship.stars && !item.shoot){
                         item.star = true;
 
-                        const star = new Star(x, y);
+                        // const star = new StarView(x, y);
 
-                        this.stars.push(star);
-                        this.dockStars.append(star.div);
-
-                        const cell = this.cells[star.y][star.x];
-                        const cellRect = cell.getBoundingClientRect();
-                        const divRect = this.div.getBoundingClientRect();
-
-                        star.div.style.left = `${cellRect.left - divRect.left}px`;
-                        star.div.style.top = `${cellRect.top - divRect.top}px`;
-                        star.div.style.fontSize = `60px`;
+                        // this.stars.push(star);
                     }
                 }
             }
@@ -213,17 +140,13 @@ class Battlefield {
         return true;
     }
 
-    removeStar(star){
+    removeStars(star){
         if (!this.stars.includes(star)) {
             return false;
         }
 
         const index = this.stars.indexOf(star);
         this.stars.splice(index, 1);
-
-        if (Array.prototype.includes.call(this.dockStars.children, star.div)) {
-			star.div.remove();
-		}
 
         this._private_changed = true;
         return true;
@@ -233,7 +156,7 @@ class Battlefield {
         const stars = this.stars.slice();
 
         for (const star of stars) {
-            this.removeStar(star);
+            this.removeStars(star);
         }
 
         return stars.length;
@@ -274,23 +197,6 @@ class Battlefield {
             }
         }
 
-        if (this.showShip) {
-            this.dock.append(ship.div);
-
-            if(ship.placed){
-                const cell = this.cells[y][x];
-                const cellRect = cell.getBoundingClientRect();
-                const battlefieldRect = this.div.getBoundingClientRect();
-
-                ship.div.style.left = `${cellRect.left - battlefieldRect.left}px`;
-                ship.div.style.top = `${cellRect.top - battlefieldRect.top}px`;
-            } else{
-                ship.setDirection("row");
-                ship.div.style.left = `${ship.startX}px`;
-                ship.div.style.top = `${ship.startY}px`;
-            }
-        }
-
         this._private_changed = true;
         return true;
     }
@@ -306,10 +212,6 @@ class Battlefield {
         ship.x = null;
         ship.y = null;
 
-        if(Array.prototype.includes.call(this.dock.children, ship.div)){
-            ship.div.remove();
-        }
-
         this._private_changed = true;
         return true;
     }
@@ -324,49 +226,49 @@ class Battlefield {
         return true;
     }
 
-    addShadowShip(shadow, x, y){
-        if (this.shadowShip.includes(shadow) ) {
-            return false;
-        }
+    // addShadowShip(shadow, x, y){
+    //     if (this.shadowShip.includes(shadow) ) {
+    //         return false;
+    //     }
 
-        this.shadowShip.push(shadow);
+    //     this.shadowShip.push(shadow);
 
     
 
-        this.div.append(shadow.div);
+    //     this.div.append(shadow.div);
 
-        if(shadow.placed){
-            const cell = this.cells[y][x];
-            const cellRect = cell.getBoundingClientRect();
-            const battlefieldRect = this.div.getBoundingClientRect();
+    //     if(shadow.placed){
+    //         const cell = this.cells[y][x];
+    //         const cellRect = cell.getBoundingClientRect();
+    //         const battlefieldRect = this.div.getBoundingClientRect();
 
-            shadow.div.style.left = `${cellRect.left - battlefieldRect.left}px`;
-            shadow.div.style.top = `${cellRect.top - battlefieldRect.top}px`;
-        }
+    //         shadow.div.style.left = `${cellRect.left - battlefieldRect.left}px`;
+    //         shadow.div.style.top = `${cellRect.top - battlefieldRect.top}px`;
+    //     }
 
-        this._private_changed = true;
-        return true;
-    }
+    //     this._private_changed = true;
+    //     return true;
+    // }
 
-    removeShadow(shadowShip){
-        // if (!this.shadowShip.includes(shadowShip)) {
-        //     return false;
-        // }
+    // removeShadow(shadowShip){
+    //     // if (!this.shadowShip.includes(shadowShip)) {
+    //     //     return false;
+    //     // }
 
-        // const index = this.shadowShip.indexOf(shadowShip);
-        // this.shadowShip.splice(index, 1);
+    //     // const index = this.shadowShip.indexOf(shadowShip);
+    //     // this.shadowShip.splice(index, 1);
 
-        //shadowShip.x = null;
-        //shadowShip.y = null;
-        this.shadowShip = [];
+    //     //shadowShip.x = null;
+    //     //shadowShip.y = null;
+    //     this.shadowShip = [];
 
-        if(Array.prototype.includes.call(this.div.children, shadowShip.dsiv)){
-            shadowShip.div.remove();
-        }
+    //     if(Array.prototype.includes.call(this.div.children, shadowShip.dsiv)){
+    //         shadowShip.div.remove();
+    //     }
 
-        this._private_changed = true;
-        return true;
-    }
+    //     this._private_changed = true;
+    //     return true;
+    // }
 
     addShoot(shoot) {
         for (const { x, y } of this.shoots) {
@@ -413,15 +315,6 @@ class Battlefield {
             }
         }
 
-        this.polygon.append(shoot.div);
-
-        const cell = this.cells[shoot.y][shoot.x];
-        const cellRect = cell.getBoundingClientRect();
-        const divRect = this.div.getBoundingClientRect();
-
-        shoot.div.style.left = `${cellRect.left - divRect.left}px`;
-        shoot.div.style.top = `${cellRect.top - divRect.top}px`;
-
         this._private_changed = true;
 
         return true;
@@ -434,10 +327,6 @@ class Battlefield {
 
         const index = this.shoots.indexOf(shoot);
         this.shoots.splice(index, 1);
-
-        if (Array.prototype.includes.call(this.polygon.children, shoot.div)) {
-			shoot.div.remove();
-		}
 
         this._private_changed = true;
         return true;
@@ -459,7 +348,7 @@ class Battlefield {
         for(let size = 4; size >= 1; size--){
             for(let n = 0; n < 5 - size; n++){
                 const newDir = getRandomDirection();
-                const ship = new Ship(size, newDir);
+                const ship = new ShipView(size, newDir);
 
                 while (!ship.placed) {
                     const x = getRandomBetween(0,9);
@@ -480,9 +369,5 @@ class Battlefield {
             return false;
         }
         return 0 <= x && x < 10 && 0 <= y && y < 10;
-    }
-
-    isUnder(point){
-        return this.isUnderPoint(point, this.div);
     }
 }
