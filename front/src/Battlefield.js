@@ -87,7 +87,7 @@ class Battlefield {
         return true;
     }
 
-    get killedShip(){
+    get killedShip() {
         for(const ship of this.ships){
             if(ship.killed && !ship.stars){
                 return ship;
@@ -96,19 +96,21 @@ class Battlefield {
         return false;
     }
 
-    get allShipsPlaced(){
+    get complete() {
+        if(this.ships.length !== 10){
+            return false;
+        }
+
         for(let ship of this.ships){
-            if(this.ships.length === 0){
-                return false;
-            }
             if(!ship.placed){
                 return false;
             }
         }
+        
         return true;
     }
 
-    addStars(ship){
+    addStars(ship) {
         for (const { x, y } of this.stars) {
             if (x === ship.x && y === ship.y) {
                 console.log("addStar return false");

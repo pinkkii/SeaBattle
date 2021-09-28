@@ -1,3 +1,4 @@
+const Player = require("./Player");
 const Party = require("./Party");   // Импорт(старый синтаксис)
 
 module.exports = class PartyManager{
@@ -5,6 +6,15 @@ module.exports = class PartyManager{
     parties = [];
 
     waitingRandom = [];              // Масив ожидающих случайных игроков
+
+    connection(socket) {
+        // TODO: indefinity user
+        const player = new Player(socket);
+    }
+
+    disconnect(socket) {
+
+    }
 
     addPlayer(player) {
         if (this.players.includes(player)) {

@@ -96,15 +96,17 @@ module.exports = class Battlefield {
         return false;
     }
 
-    get allShipsPlaced(){
+    get complete(){
+        if(this.ships.length !== 10){
+            return false;
+        }
+
         for(let ship of this.ships){
-            if(this.ships.length === 0){
-                return false;
-            }
             if(!ship.placed){
                 return false;
             }
         }
+
         return true;
     }
 

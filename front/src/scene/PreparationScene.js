@@ -156,7 +156,7 @@ class PreparationScene extends Scene{
         }
 
         //если все корабли расставлены, включается кнопка БОЯ
-        if (player.allShipsPlaced) {
+        if (player.complete) {
             document.querySelector(`[data-type="play"]`).disabled = false;
             document.querySelector(`[data-type="randomPlayer"]`).disabled = false;
         } else {

@@ -31,21 +31,20 @@ http.listen(port, () => {
 
 // Прослушивание socket соединений 
 io.on("connection", (socket) => {
-    io.emit("playerCount", io.engine.clientsCount);
-    
-    pm.addPlayer(socket);
+    pm.connection(socket);
 
+    io.emit("playerCount", io.engine.clientsCount);
     // Отключение коннекта
     socket.on("disconnect", () => {
-      pm.removePlayer(socket);
-
+      pm.disconnect(socket);
       io.emit("playerCount", io.engine.clientsCount);
     });
 
     // Поиск случайного соперника
-    socket.on("findRandomOpponent", () => {
-      pm.playRandom(socket);
-      socket.emit("statusChange", "randomFinding"); 
-    });
+    // socket.on("findRandomOpponent", () => {
+    //   socket.emit("statusChange", "randomFinding"); 
+      
+    //   pm.playRandom(socket);
+    // });
 });
 

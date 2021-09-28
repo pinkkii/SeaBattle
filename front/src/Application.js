@@ -15,12 +15,11 @@ class Application{
         const player = new BattlefieldView(true);
         const opponent = new BattlefieldView();
 
-        // const socket = io();
+        const socket = io();
 
         let bot = new Bot(player);
 
-        Object.assign(this, { mouse, player, opponent, bot});
-        // this.socket = socket;
+        Object.assign(this, { mouse, player, opponent, bot, socket});
             
         document.querySelector('[data-side="player"]')
             .append(player.div);
@@ -35,9 +34,9 @@ class Application{
             scene.init();
         }
 
-        // socket.on("playerCount", (n) => {
-        // document.querySelector("[data-playersCount]").textContent = n;
-        // });
+        socket.on("playerCount", (n) => {
+        document.querySelector("[data-playersCount]").textContent = n;
+        });
        
         requestAnimationFrame(() => this.tick());
     }
