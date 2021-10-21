@@ -19,7 +19,15 @@ class OnlineScene extends Scene{
     }
 
     start(variant) {
-        const { socket } = this.app;
+        const { socket, player } = this.app;
+
+        socket.emit("shipSet", player.ships.map((ship) => ({
+            size: ship.size,
+            direction: ship.direction,
+            x: ship.x,
+            y: ship.y
+            }))
+        );
 
         socket.emit("findRandomOpponent");
 
