@@ -372,4 +372,9 @@ class Battlefield {
         }
         return 0 <= x && x < 10 && 0 <= y && y < 10;
     }
+
+    clear() {
+		this.removeAllShoots();
+		this.removeAllShips();
+	}
 }

@@ -15,10 +15,12 @@ module.exports = class PartyManager{
 
         socket.on("shipSet", (ships ) => {
             if (this.waitingRandom.includes(player)) {
+                console.log("11");
                 return;
             }
 
             if (player.party) {
+                console.log("22");
                 return;
             }
 
@@ -32,14 +34,18 @@ module.exports = class PartyManager{
 
         socket.on("findRandomOpponent", () => {
             if (this.waitingRandom.includes(player)) {
+                console.log("1");
                 return;
             }
 
             if (player.party) {
+                console.log("2");
                 return;
             }
 
             this.waitingRandom.push(player);
+            console.log("asd");
+            player.emit("statusChange", "randomFinding");
 
             if (this.waitingRandom.length >= 2) {
                 const [player1, player2] = this.waitingRandom.splice(0,2);

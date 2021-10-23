@@ -10,11 +10,11 @@ class OnlineScene extends Scene{
             this.statusUpdate();
         });
 
-        socket.on("partyStart", (ownTurn) => {
+        socket.on("turnUpdate", (ownTurn) => {
             this.ownTurn = ownTurn;
-            this.status = "play";
             this.statusUpdate();
         });
+
         this.statusUpdate();
     }
 
@@ -28,7 +28,7 @@ class OnlineScene extends Scene{
             y: ship.y
             }))
         );
-
+ 
         socket.emit("findRandomOpponent");
 
         document.querySelector(`[data-type="play"]`).hidden = true;
@@ -46,13 +46,24 @@ class OnlineScene extends Scene{
 
     statusUpdate() {
         const divStatus = document.querySelector(".battle-status");
-
         if (!this.status) {
             divStatus.textContent = "";
         } else if (this.status === "randomFinding") {
             divStatus.textContent = "Поиск случайного соперника";
         } else if (this.status === "play") {
             divStatus.textContent = this.ownTurn ? "Ваш ход" : "Ход соперника";
+            if (this.ownTurn) {
+                const playerStatus = document.querySelector(`[data-status="player"]`);
+                playerStatus.style.backgroundColor = `rgba(17, 158, 17, .6)`;
+                const opponentStatus = document.querySelector(`[data-status="opponent"]`);
+                opponentStatus.style.backgroundColor = `rgba(224, 24, 24, .6)`;
+            } else {
+                const playerStatus = document.querySelector(`[data-status="player"]`);
+                playerStatus.style.backgroundColor = `rgba(224, 24, 24, .6)` ;
+                const opponentStatus = document.querySelector(`[data-status="opponent"]`);
+                opponentStatus.style.backgroundColor = `rgba(17, 158, 17, .6)`;
+            }
+            console.log("status:3", this.status);
         }
     }
 }

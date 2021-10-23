@@ -25,4 +25,10 @@ module.exports = class Player {
     constructor(socket) {
         this.socket = socket;
     }
+
+    emit(...args) {
+        if (this.socket && this.socket.connected) {
+            this.socket.emit(...args);
+        }
+    }
 }
