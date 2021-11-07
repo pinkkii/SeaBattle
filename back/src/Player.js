@@ -7,23 +7,15 @@ module.exports = class Player {
 
     get ready() {
         return this.battlefield.complete && !this.party && this.socket;
-        
-        // if(!this.battlefield.complete) {
-        //     return false;
-        // }
-
-        // if (this.party) {
-        //     return false;
-        // }
-
-        // if(!this.socket) {
-        //     return false;
-        // }
-
-        // return true;
     }
     constructor(socket) {
         this.socket = socket;
+    }
+
+    on(...args) {
+        if (this.socket && this.socket.connected) {
+            this.socket.on(...args);
+        }
     }
 
     emit(...args) {

@@ -127,10 +127,6 @@ module.exports = class Battlefield {
                     const item = this.matrix[y][x];
                     if(!item.ship && !ship.stars && !item.shoot){
                         item.star = true;
-
-                        // const star = new StarView(x, y);
-
-                        // this.stars.push(star);
                     }
                 }
             }
@@ -227,50 +223,6 @@ module.exports = class Battlefield {
 
         return true;
     }
-
-    // addShadowShip(shadow, x, y){
-    //     if (this.shadowShip.includes(shadow) ) {
-    //         return false;
-    //     }
-
-    //     this.shadowShip.push(shadow);
-
-    
-
-    //     this.div.append(shadow.div);
-
-    //     if(shadow.placed){
-    //         const cell = this.cells[y][x];
-    //         const cellRect = cell.getBoundingClientRect();
-    //         const battlefieldRect = this.div.getBoundingClientRect();
-
-    //         shadow.div.style.left = `${cellRect.left - battlefieldRect.left}px`;
-    //         shadow.div.style.top = `${cellRect.top - battlefieldRect.top}px`;
-    //     }
-
-    //     this._private_changed = true;
-    //     return true;
-    // }
-
-    // removeShadow(shadowShip){
-    //     // if (!this.shadowShip.includes(shadowShip)) {
-    //     //     return false;
-    //     // }
-
-    //     // const index = this.shadowShip.indexOf(shadowShip);
-    //     // this.shadowShip.splice(index, 1);
-
-    //     //shadowShip.x = null;
-    //     //shadowShip.y = null;
-    //     this.shadowShip = [];
-
-    //     if(Array.prototype.includes.call(this.div.children, shadowShip.dsiv)){
-    //         shadowShip.div.remove();
-    //     }
-
-    //     this._private_changed = true;
-    //     return true;
-    // }
 
     addShoot(shoot) {
         for (const { x, y } of this.shoots) {

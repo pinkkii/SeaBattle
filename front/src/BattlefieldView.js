@@ -173,8 +173,6 @@ class BattlefieldView extends Battlefield{
 		}
 
         if (Array.prototype.includes.call(this.dockStars.children, star.div)) {
-            console.log("remove ");
-
             star.div.remove()
 		}
 
@@ -182,6 +180,6 @@ class BattlefieldView extends Battlefield{
     }
 
     isUnder(point){
-        return this.isUnderPoint(point, this.div);
+        return isUnderPoint(point, this.div);
     }
 }

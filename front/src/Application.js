@@ -13,7 +13,7 @@ class Application{
         const mouse = new Mouse(document.body);
 
         const player = new BattlefieldView(true);
-        const opponent = new BattlefieldView();
+        const opponent = new BattlefieldView(false);
 
         const socket = io();
 
