@@ -145,9 +145,10 @@ class BattlefieldView extends Battlefield{
                     if(!item.ship && !item.shoot){
 
                         const star = new StarView(x, y);
-                        this.stars.push(star);
                         
                         this.matrix[y][x].shoot = true;
+
+                        this.stars.push(star);
 
                         this.dockStars.append(star.div);
 

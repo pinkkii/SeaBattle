@@ -20,6 +20,8 @@ module.exports = class Party{
             player.emit("statusChange", "play");
 
             player.on("addShoot", (x, y) => {
+                console.log("Party( player.on(addShoot) )");
+                
                 if (this.turnPlayer !== player) {
                     return;
                 }
@@ -46,31 +48,36 @@ module.exports = class Party{
                         this.turnPlayer = this.nextPlayer;
                         this.turnUpdate(); 
                     }
+
+                    if (shoot.variant === "killed") {
+                        const player1DeadShip = player1.battlefield.ships.filter(ship => ship.killed);
+                        const player2DeadShip = player2.battlefield.ships.filter(ship => ship.killed);        
+        
+                        player1.emit("setStars", player1DeadShip, player2DeadShip);
+                        player2.emit("setStars", player2DeadShip, player1DeadShip);
+        
+                        console.log("shoot.variant === killed: pl1 ", player1DeadShip);
+                        console.log("shoot.variant === killed: pl2 ", player2DeadShip);
+                    }
                 }
             });
 
-            player.on("addStars", () => {
-                console.log("PARTY addStars");
-                if (this.turnPlayer !== player) {
-                    console.log("PARTY addStars RETURN");
-                    return;
-                }
+            // player.on("addStars", (ship) => {
+            //     console.log("PARTY addStars");
+            //     if (this.turnPlayer !== player) {
+            //         console.log("PARTY addStars RETURN");
+            //         return;
+            //     }
 
-                const dieShip = player1.battlefield.killedShip || player2.battlefield.killedShip;
+            //     const player1DeadShip = player1.battlefield.ships.filter(ship => ship);
+            //     const player2DeadShip = player2.battlefield.ships.filter(ship => ship);
 
-                if (dieShip) {
-                    const player1Stars = player1.battlefield.ships.map( (ship) => (dieShip));
-                    const player2Stars = player2.battlefield.stars.map((ship) => ({
-                        x: ship.x,
-                        y: ship.y,
-                    }));
+            //     player1.emit("setStars", player1DeadShip, player2DeadShip);
+            //     player2.emit("setStars", player2DeadShip, player1DeadShip);
 
-                    player1.emit("setStars", player1Stars, player2Stars);
-                    player2.emit("setStars", player2Stars, player1Stars);
-                    console.log("dieShip1", player1Stars);
-                    console.log("dieShip2", player2Stars);
-                }
-            });
+            //     console.log("dieShip1", player1DeadShip);
+            //     console.log("dieShip2", player2DeadShip);
+            // });
         }
         this.turnUpdate();
     }

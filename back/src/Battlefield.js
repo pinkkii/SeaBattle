@@ -127,6 +127,9 @@ module.exports = class Battlefield {
                     const item = this.matrix[y][x];
                     if(!item.ship && !ship.stars && !item.shoot){
                         item.star = true;
+                        item.shoot = true;
+                        item.free = false;
+                        const star = new Star(x, y);
                     }
                 }
             }
@@ -227,6 +230,7 @@ module.exports = class Battlefield {
     addShoot(shoot) {
         for (const { x, y } of this.shoots) {
             if (x === shoot.x && y === shoot.y) {
+                console.log("какого хуя?");
                 return false;
             }
         }
@@ -252,13 +256,14 @@ module.exports = class Battlefield {
 
                 if(!item.wounded){
                     killed = false;
-                    break;
+                    break;  
                 }
 
             }
 
             if(killed){
                 ship.killed = true;
+
                 for(let i = 0; i < ship.size; i++){
                     const cx = ship.x + dx * i;
                     const cy = ship.y + dy * i;

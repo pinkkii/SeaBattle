@@ -13,7 +13,7 @@ module.exports = class PartyManager{
         const player = new Player(socket);
         this.players.push(player);
 
-        socket.on("shipSet", (ships ) => {
+        socket.on("shipSet", (ships) => {
             if (this.waitingRandom.includes(player)) {
                 return;
             }

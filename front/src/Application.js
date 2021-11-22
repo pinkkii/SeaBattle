@@ -13,7 +13,7 @@ class Application{
         const mouse = new Mouse(document.body);
 
         const player = new BattlefieldView(true);
-        const opponent = new BattlefieldView(false);
+        const opponent = new BattlefieldView(true);
 
         const socket = io();
 
@@ -35,7 +35,7 @@ class Application{
         }
 
         socket.on("playerCount", (n) => {
-        document.querySelector("[data-playersCount]").textContent = n;
+            document.querySelector("[data-playersCount]").textContent = n;
         });
        
         requestAnimationFrame(() => this.tick());

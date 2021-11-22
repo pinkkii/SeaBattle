@@ -15,7 +15,9 @@ class OnlineScene extends Scene{
             this.statusUpdate();
         });
 
+        // -- оставил на потом(не применяется)
         socket.on("addShoot", ({x, y, variant}) => {
+            console.log("OnlineScene(addShoot)");
             const shoot = new ShootView(x, y, variant);
 
             if (this.ownTurn) {
@@ -24,8 +26,10 @@ class OnlineScene extends Scene{
                 this.app.player.addShoot(shoot);
             }
         });
+        // --/ оставил на потом(не применяется)
 
         socket.on("setShoots", (ownShoots, opponentShoots) => {
+            console.log("OnlineScene(setShoots)");
             player.removeAllShoots();
 
             for(const {x, y, variant} of ownShoots){
@@ -41,39 +45,40 @@ class OnlineScene extends Scene{
             }
         });
 
-        socket.on("addStars", () => {
-            console.log("addStarsOnline");
-            if (this.ownTurn) {
-                const ship = opponent.killedShip;
-                if (ship) {
-                    this.app.opponent.addStars(ship);
-                }
-            } else {
-                const ship = player.killedShip;
-                if (ship) {
-                    this.app.player.addShoot(ship);   
-                }
-            }
-        });
+        // socket.on("addStars", () => {
+        //     console.log("addStarsOnline");
+        //     if (this.ownTurn) {
+        //         const ship = opponent.killedShip;
+        //         if (ship) {
+        //             this.app.opponent.addStars(ship);
+        //         }
+        //     } else {
+        //         const ship = player.killedShip;
+        //         if (ship) {
+        //             this.app.player.addShoot(ship);   
+        //         }
+        //     }
+        // });
 
-        socket.on("setStars", (ownStars, opponentStars) => {
-            console.log("setStars");
+        socket.on("setStars", (ownShips, opponentShips) => {
+            console.log("OnlineScene: setStars");
 
-            const ship = opponent.killedShip;
-            console.log("setStars1", ship);
-            this.app.opponent.addStars(ship);
-            console.log("setStars2");
+            // const ship =  this.app.opponent.killedShip;
+            // console.log("setStars1", ship);
+
+            // this.app.opponent.addStars(ship);
+            // console.log("setStars2");
+
             player.removeAllStars();
 
-            for(const ship of ownStars){
-                player.addShoot(ship);
-                сonsole.log("ship: ", ship);
+            for(const ship of ownShips){
+                player.addStars(ship);
             }
 
             opponent.removeAllStars();
 
-            for(const ship of opponentStars){
-                opponent.addShoot(ship);
+            for(const ship of opponentShips){
+                opponent.addStars(ship);
             }
         });
 
@@ -106,6 +111,7 @@ class OnlineScene extends Scene{
         const divStatus = document.querySelector(".battle-status");
         const playerStatus = document.querySelector(`[data-status="player"]`);
         const opponentStatus = document.querySelector(`[data-status="opponent"]`);
+
         if (!this.status) {
             divStatus.textContent = "";
         } else if (this.status === "randomFinding") {
@@ -136,15 +142,11 @@ class OnlineScene extends Scene{
                     const x = parseInt(cell.dataset.x);
                     const y = parseInt(cell.dataset.y);
 
-                    socket.emit("addShoot", x, y);
-                    socket.emit("addStars");
-                    // console.log("shiP",this.app.opponent.killedShip);
-                    // console.log("shiP",this.app.player.killedShip);
-                    // if(opponent.killedShip){
-                    //     socket.emit("addStars");
-                    //     console.log("shiP",opponent.killedShip);
-                    // }
-
+                    const item = opponent._private_matrix[y][x];
+        
+                    if (!item.star && !item.shoot) {
+                        socket.emit("addShoot", x, y);
+                    }
                 }
             }
         }

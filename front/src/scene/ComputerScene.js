@@ -40,10 +40,10 @@ class ComputerScene extends Scene{
 
         let status = document.querySelector(".result");
 
-        let dieShip = player.killedShip || opponent.killedShip;
+        let deadShip = player.killedShip || opponent.killedShip;
         this.end = player.loser || opponent.loser;
 
-        if(dieShip){
+        if(deadShip){
             if(player.killedShip){
                 const ship = player.killedShip;
                 player.addStars(ship);

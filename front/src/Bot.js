@@ -59,7 +59,7 @@ class Bot{
             let x = this.x;
             let y = this.y;
     
-            if (this.item.shoot) {
+            if (this.item.shoot || this.item.star) {
                 shoted = false;
             } else {
                 shoted = true;
@@ -96,6 +96,7 @@ class Bot{
 
         this.pX = this.x;
         this.pY = this.y;
+
         while (!temp) {
             let coord = getRandomBetween(0,3);
 

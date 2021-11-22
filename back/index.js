@@ -33,17 +33,11 @@ io.on("connection", (socket) => {
     pm.connection(socket);
 
     io.emit("playerCount", io.engine.clientsCount);
+    
     // Отключение коннекта
     socket.on("disconnect", () => {
       pm.disconnect(socket);
       io.emit("playerCount", io.engine.clientsCount);
     });
-
-    // Поиск случайного соперника
-    // socket.on("findRandomOpponent", () => {
-    //   socket.emit("statusChange", "randomFinding"); 
-      
-    //   pm.playRandom(socket);
-    // });
 });
 
