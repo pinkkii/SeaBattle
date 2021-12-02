@@ -15,7 +15,7 @@ function getRandomDirection(){
     return (randNum === 0 ? "row" : "column");
 }
 
-function addListener(element, ...args){
-    element.addEventListener(...args);
-    return () => element.removeEventListener(...args); 
+function addListener(element, ...args) {
+	element.addEventListener(...args);
+	return () => element.removeEventListener(...args);
 }

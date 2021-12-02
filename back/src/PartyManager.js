@@ -46,6 +46,11 @@ module.exports = class PartyManager{
                 const [player1, player2] = this.waitingRandom.splice(0,2);
                 const party = new Party(player1, player2);
                 this.parties.push(party);
+
+                const unsubscribe = party.subscribe(() => {
+                    unsubscribe();
+                    this.removeParty(party);
+                })
             }
         }); 
     }

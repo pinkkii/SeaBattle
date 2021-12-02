@@ -5,6 +5,7 @@ class ComputerScene extends Scene{
     end = false;
 
     removeEventListeners = [];
+    
     init() {
         console.log("init computer");
         this.RandomPlaceShips();

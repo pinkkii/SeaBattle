@@ -1,17 +1,22 @@
 const Battlefield = require("./Battlefield");
+const Observer = require("./Observer");
 const Shoot = require("./Shoot");
 
-module.exports = class Party{
+module.exports = class Party extends Observer{
     player1 = null;
     player2 = null;
 
     turnPlayer = null;
+
+    play = true;
 
     get nextPlayer() { 
         return this.turnPlayer === this.player1 ? this.player2 : this.player1;
     }
 
     constructor(player1, player2) {
+        super();
+
         Object.assign(this, { player1, player2 });
         this.turnPlayer = player1;
 
@@ -19,12 +24,19 @@ module.exports = class Party{
             player.party = this;
             player.emit("statusChange", "play");
 
+            player.on("gaveup", () => {
+                this.stop();
+
+                player1.emit("statusChange", player1 === player ? "loser" : "winner");
+                player2.emit("statusChange", player2  === player ? "loser" : "winner");
+            });
+
             player.on("addShoot", (x, y) => {
-                console.log("Party( player.on(addShoot) )");
-                
-                if (this.turnPlayer !== player) {
+
+                if (this.turnPlayer !== player || !this.play) {
                     return;
                 }
+
                 const shoot = new Shoot(x, y);
                 const result = this.nextPlayer.battlefield.addShoot(shoot);
 
@@ -60,29 +72,31 @@ module.exports = class Party{
                         console.log("shoot.variant === killed: pl2 ", player2DeadShip);
                     }
                 }
+
+                if (player1.battlefield.loser || player2.battlefield.loser) {
+                    this.stop();
+
+                    player1.emit("statusChange", player1.battlefield.loser ? "loser" : "winner");
+                    player2.emit("statusChange", player2.battlefield.loser ? "loser" : "winner");
+                }
+
             });
-
-            // player.on("addStars", (ship) => {
-            //     console.log("PARTY addStars");
-            //     if (this.turnPlayer !== player) {
-            //         console.log("PARTY addStars RETURN");
-            //         return;
-            //     }
-
-            //     const player1DeadShip = player1.battlefield.ships.filter(ship => ship);
-            //     const player2DeadShip = player2.battlefield.ships.filter(ship => ship);
-
-            //     player1.emit("setStars", player1DeadShip, player2DeadShip);
-            //     player2.emit("setStars", player2DeadShip, player1DeadShip);
-
-            //     console.log("dieShip1", player1DeadShip);
-            //     console.log("dieShip2", player2DeadShip);
-            // });
         }
         this.turnUpdate();
     }
     turnUpdate() {
         this.player1.emit("turnUpdate", this.player1 === this.turnPlayer);
         this.player2.emit("turnUpdate", this.player2 === this.turnPlayer);
+    }
+
+    stop() {
+        this.play = false;
+        this.dispatch();
+
+        this.player1.party = null;
+        this.player2.party = null;
+
+        this.player1 = null;
+        this.player2 = null;
     }
 };

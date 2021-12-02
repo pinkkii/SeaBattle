@@ -2,6 +2,8 @@ class OnlineScene extends Scene{
     status = "";
     ownTurn = false;
 
+    removeEventListeners = [];
+
     init() {
         const { socket, player, opponent } = this.app;
 
@@ -63,12 +65,6 @@ class OnlineScene extends Scene{
         socket.on("setStars", (ownShips, opponentShips) => {
             console.log("OnlineScene: setStars");
 
-            // const ship =  this.app.opponent.killedShip;
-            // console.log("setStars1", ship);
-
-            // this.app.opponent.addStars(ship);
-            // console.log("setStars2");
-
             player.removeAllStars();
 
             for(const ship of ownShips){
@@ -98,13 +94,46 @@ class OnlineScene extends Scene{
  
         socket.emit("findRandomOpponent");
 
-        document.querySelector(`[data-type="play"]`).hidden = true;
+        document.querySelector(`[data-type="play"]`).hidden = true; 
         document.querySelector(`[data-type="random"]`).hidden = true;
         document.querySelector(`[data-type="manually"]`).hidden = true;
         document.querySelector(`[data-type="surrender"]`).hidden = true;
         document.querySelector(`[data-type="randomPlayer"]`).hidden = true;
+        const btnGaveUp = document.querySelector('[data-type="surrender"]').hidden = false;
+        const btnAgain = document.querySelector('[data-type="again"]').hidden = true;
+
+        this.removeEventListeners = [];
+
+        // this.removeEventListeners.push(addListener(btnGaveUp, "click", () => {
+        //     this.socket.emit("gaveup");
+        //     this.app.start("preparation");
+        // }));
+        // this.removeEventListeners.push(addListener(btnAgain, "click", () => {
+        //     this.app.start("preparation");
+        // }));
+
+        this.removeEventListeners.push(
+			addListener(btnGaveUp, "click", () => {
+				this.app.start("preparation");
+			})
+		);
+
+		this.removeEventListeners.push(
+			addListener(btnAgain, "click", () => {
+				socket.emit("gaveup");
+				this.app.start("preparation");
+			})
+		);
 
         this.statusUpdate();
+    }
+
+    stop() {
+        for(const removeEventListener of this.removeEventListeners){
+            removeEventListener(); 
+        }
+
+        this.removeEventListeners = [];
     }
 
     statusUpdate() {
@@ -125,6 +154,10 @@ class OnlineScene extends Scene{
                 playerStatus.style.backgroundColor = `rgba(224, 24, 24, .6)` ;
                 opponentStatus.style.backgroundColor = `rgba(17, 158, 17, .6)`;
             }
+        } else if (this.status === "winner") {
+            divStatus.textContent = "Вы победили!!!";
+        } else if (this.status === "loser") {
+            divStatus.textContent = "Вы проиграли(";
         }
     }
 
@@ -133,6 +166,10 @@ class OnlineScene extends Scene{
 
         const cells = opponent.cells.flat();
  
+        if (player.loser) {
+            console.log("eee");
+            return;
+        }
 
         if (opponent.isUnder(mouse)) {
             const cell = opponent.cells.flat().find(cell => isUnderPoint(mouse, cell));
@@ -151,4 +188,4 @@ class OnlineScene extends Scene{
             }
         }
     }
-}
+} 
