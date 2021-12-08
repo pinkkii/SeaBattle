@@ -48,15 +48,40 @@ module.exports = class PartyManager{
                 this.parties.push(party);
 
                 const unsubscribe = party.subscribe(() => {
-                    unsubscribe();
                     this.removeParty(party);
+                    unsubscribe();
                 })
             }
         }); 
+
+		socket.on("gaveup", () => {
+			if (player.party) {
+				player.party.gaveup(player);
+			}
+		});
+
+        socket.on('addShoot', (x, y) => {
+            if(player.party) {
+                player.party.addShoot(player, x, y);
+            }
+        });
     }
 
     disconnect(socket) {
+        const player = this.players.find(player => player.socket === socket);
 
+        if (!player) {
+            return;
+        }
+
+        if (player.party) {
+            player.party.gaveup(player);  
+        }
+
+        if (this.waitingRandom.includes(player)) {
+            const index = this.waitingRandom.indexOf(player);
+            this.waitingRandom.splice(index, 1);
+        }
     }
 
     addPlayer(player) {
