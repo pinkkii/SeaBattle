@@ -65,6 +65,12 @@ module.exports = class PartyManager{
                 player.party.addShoot(player, x, y);
             }
         });
+
+        socket.on("message", message => {
+            if (player.party) {
+                player.party.sendMessage(message);
+            }
+        });
     }
 
     disconnect(socket) {

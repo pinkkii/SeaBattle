@@ -103,4 +103,11 @@ module.exports = class Party extends Observer{
             player2.emit("statusChange", player2.battlefield.loser ? "loser" : "winner");
         }
     }
+
+    sendMessage(message) {
+        const { player1, player2 } = this;
+
+        player1.emit("message", message, "player1");
+        player2.emit("message", message, "player2");
+    }
 };
