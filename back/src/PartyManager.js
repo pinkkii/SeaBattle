@@ -1,24 +1,39 @@
 const Player = require("./Player");
 const Party = require("./Party");   // Импорт(старый синтаксис)
 const Ship = require("./Ship");
+const { getRandomString } = require("./additional");
 
 module.exports = class PartyManager{
     players = [];
     parties = [];
 
     waitingRandom = [];              // Масив ожидающих случайных игроков
+    waitingChallenge = new Map();
 
     connection(socket) {
         // TODO: indefinity user
         const player = new Player(socket);
         this.players.push(player);
 
-        socket.on("shipSet", (ships) => {
+        const isFree = () => {
             if (this.waitingRandom.includes(player)) {
-                return;
+                return false;
+            }
+
+            const values = Array.from(this.waitingChallenge.values());
+            if (values.includes(player)) {
+                return false;
             }
 
             if (player.party) {
+                return false;
+            }
+
+            return true;
+        };
+
+        socket.on("shipSet", (ships) => {
+            if (!isFree()) {
                 return;
             }
 
@@ -31,11 +46,7 @@ module.exports = class PartyManager{
         });
 
         socket.on("findRandomOpponent", () => {
-            if (this.waitingRandom.includes(player)) {
-                return;
-            }
-
-            if (player.party) {
+            if (!isFree()) {
                 return;
             }
 
@@ -53,6 +64,26 @@ module.exports = class PartyManager{
                 })
             }
         }); 
+
+        socket.on("challengeOpponent", (key = '') => {
+            if (!isFree()) {
+                return;
+            } 
+
+            if (this.waitingChallenge.has(key)) {
+                const opponent = this.waitingChallenge.get(key);
+                this.waitingChallenge.delete(key);
+
+                const party = new Party(opponent, player);
+                this.parties.push(party);
+            } else {
+                key = getRandomString(20);
+                socket.emit('challengeOpponent', key);
+                socket.emit('statusChange', 'waiting');
+    
+                this.waitingChallenge.set(key, player); 
+            }
+        })
 
 		socket.on("gaveup", () => {
 			if (player.party) {
@@ -87,6 +118,15 @@ module.exports = class PartyManager{
         if (this.waitingRandom.includes(player)) {
             const index = this.waitingRandom.indexOf(player);
             this.waitingRandom.splice(index, 1);
+        }
+
+        const values = Array.from(this.waitingChallenge.values());
+
+        if (values.includes(player)) {
+            const index = values.indexOf(player);
+            const keys = Array.from(this.waitingChallenge.keys());
+            const key =  keys[index];
+            this.waitingChallenge.delete(key);
         }
     }
 

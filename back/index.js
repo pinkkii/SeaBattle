@@ -1,6 +1,8 @@
 // Зависимости
 const session = require('express-session');
 const express = require('express');
+const fs = require('fs');
+const path = require('path');
 
 const PartyManager = require("./src/PartyManager");
 const pm = new PartyManager();
@@ -24,6 +26,14 @@ app.use(
 
 // Настройка статики 
 app.use(express.static("./../front/"));
+
+// По умолчанию
+app.use('*', (req, res) => {
+  res.type('html');
+  res.send(fs.readFileSync(path.join(__dirname, './../front/index.html')));
+});
+
+// Поднятия сервера
 http.listen(port, () => {
   console.log(`Example app listening at http://localhost:${port}`)
 });
