@@ -1,15 +1,17 @@
 const Battlefield = require("./Battlefield");
 
 module.exports = class Player {
+    battlefield = new Battlefield();
     socket = null;
     party = null;
-    battlefield = new Battlefield();
-
+    sessionId = null;
+    
     get ready() {
         return this.battlefield.complete && !this.party && this.socket;
     }
-    constructor(socket) {
+    constructor(socket, sessionId) {
         this.socket = socket;
+        this.sessionId = sessionId;
     }
 
     on(...args) {

@@ -3,6 +3,8 @@ const Party = require("./Party");   // Импорт(старый синтакс�
 const Ship = require("./Ship");
 const { getRandomString } = require("./additional");
 
+const RECONNECTION_TIMER = 5000; 
+
 module.exports = class PartyManager{
     players = [];
     parties = [];
@@ -10,10 +12,30 @@ module.exports = class PartyManager{
     waitingRandom = [];              // Масив ожидающих случайных игроков
     waitingChallenge = new Map();
 
+    reconnections = new Map();
+
     connection(socket) {
         // TODO: indefinity user
-        const player = new Player(socket);
-        this.players.push(player);
+        const sessionId = socket.request.sessionID;
+        let player = this.players.find(player => player.sessionId === sessionId);
+
+        if (player) {
+            player.socket.emit('doubleConnection');
+            player.socket.disconnect();
+            player.socket = socket;
+
+            if (this.reconnections.has(player)) {
+                clearTimeout(this.reconnections.get(player));
+                this.reconnections.delete(player);
+
+                if (player.party) {
+                    player.party.reconnection(player);
+                }
+            }
+        } else {
+            player = new Player(socket, sessionId);
+            this.players.push(player);
+        }
 
         const isFree = () => {
             if (this.waitingRandom.includes(player)) {
@@ -89,6 +111,20 @@ module.exports = class PartyManager{
 			if (player.party) {
 				player.party.gaveup(player);
 			}
+
+            if (this.waitingRandom.includes(player)) {
+                const index = this.waitingRandom.indexOf(player);
+                this.waitingRandom.splice(index, 1);
+            }
+    
+            const values = Array.from(this.waitingChallenge.values());
+    
+            if (values.includes(player)) {
+                const index = values.indexOf(player);
+                const keys = Array.from(this.waitingChallenge.keys());
+                const key =  keys[index];
+                this.waitingChallenge.delete(key); 
+            }
 		});
 
         socket.on('addShoot', (x, y) => {
@@ -112,9 +148,19 @@ module.exports = class PartyManager{
         }
 
         if (player.party) {
-            player.party.gaveup(player);  
-        }
+            const flag = setTimeout(() => {
+                this.reconnections.delete(player);
+    
+                if (player.party) {
+                    player.party.gaveup(player);  
+                }
 
+                this.removePlayer(player);
+            }, RECONNECTION_TIMER);
+
+            this.reconnections.set(player, flag);
+        }
+        
         if (this.waitingRandom.includes(player)) {
             const index = this.waitingRandom.indexOf(player);
             this.waitingRandom.splice(index, 1);
@@ -126,7 +172,7 @@ module.exports = class PartyManager{
             const index = values.indexOf(player);
             const keys = Array.from(this.waitingChallenge.keys());
             const key =  keys[index];
-            this.waitingChallenge.delete(key);
+            this.waitingChallenge.delete(key); 
         }
     }
 

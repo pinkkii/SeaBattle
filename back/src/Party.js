@@ -110,4 +110,46 @@ module.exports = class Party extends Observer{
         player1.emit("message", message, "player1");
         player2.emit("message", message, "player2");
     }
+
+    reconnection(player) {
+        player.emit(
+            'reconnection',
+            player.battlefield.ships.map(ship => ({
+                size: ship.size,
+                direction: ship.direction,
+                x: ship.x,
+                y: ship.y
+            }))
+        );
+
+        const player1Shoots = this.player1.battlefield.shoots.map((shoot) => ({
+            x: shoot.x, 
+            y: shoot.y,
+            variant: shoot.variant
+        }));
+
+        const player2Shoots = this.player2.battlefield.shoots.map((shoot) => ({
+            x: shoot.x,
+            y: shoot.y, 
+            variant: shoot.variant
+        }));
+
+        const player1DeadShip = this.player1.battlefield.ships.filter(ship => ship.killed);
+        const player2DeadShip = this.player2.battlefield.ships.filter(ship => ship.killed); 
+
+        if (player === this.player1) {
+            player.emit("setShoots", player1Shoots, player2Shoots);
+            player.emit("setStars", player1DeadShip, player2DeadShip);
+        } else {
+            player.emit("setShoots", player2Shoots, player1Shoots);
+            player.emit("setStars", player2DeadShip, player1DeadShip);
+        }
+
+        player.emit('statusChange', "play");
+        player.emit('turnUpdate', this.turnPlayer === player);
+
+        if (!this.play) {
+            player.emit('statusUpdate', player.battlefield.loser ? "loser" : "winner");
+        }
+    }
 };
