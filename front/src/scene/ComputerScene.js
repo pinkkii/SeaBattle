@@ -17,15 +17,22 @@ class ComputerScene extends Scene{
 
         this.init();
 
-        const btnPlay = document.querySelector(`[data-type="play"]`).hidden = true;
-        const btnRandom = document.querySelector(`[data-type="random"]`).hidden = true;
-        const btnManually = document.querySelector(`[data-type="manually"]`).hidden = true;
+        const btnPlay = document.querySelector(`[data-type="play"]`);
+        const btnRandom = document.querySelector(`[data-type="random"]`);
+        const btnManually = document.querySelector(`[data-type="manually"]`);
         const surrender = document.querySelector(`[data-type="surrender"]`);
         const btnRandomPlayer = document.querySelector(`[data-type="randomPlayer"]`);
+        const challengeBtn = document.querySelector(`[data-type="challenge"]`);
+        const takeChallengeBtn = document.querySelector(`[data-type="takeChallenge"]`);
 
         surrender.textContent = "Сдаться";
         surrender.hidden = false;
         btnRandomPlayer.hidden = true;
+        challengeBtn.hidden = true;
+        btnManually.hidden = true;
+        btnRandom.hidden = true;
+        btnPlay.hidden = true;
+        takeChallengeBtn.hidden = true;
         
         this.removeEventListeners.push(
             addListener(surrender, "click", () => this.surrenderFunc())
@@ -123,7 +130,6 @@ class ComputerScene extends Scene{
     }
 
     stop(){
-        console.log("STOP computer");
         for(const removeEventListener of this.removeEventListeners){
             removeEventListener(); 
         }

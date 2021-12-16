@@ -20,16 +20,26 @@
 			</div>
 			<div class="wrapper-button">
 				<button class="btn-app" data-type="play" disabled>Играть против бота</button>
+				<button class="btn-app" data-type="challenge">Пригласить на бой</button>
+				<button class="btn-app" data-type="takeChallenge">Принять вызов</button>
 				<button class="btn-app" data-type="randomPlayer" disabled>Играть против случайного игрока</button>
 				<button class="btn-app" data-type="random">Расставить корабли в случайном порядке</button>
 				<button class="btn-app" data-type="manually">Расставить корабли вручную</button>
+				
 				<div class="result" hidden></div>
 				<button class="btn-app btn-surrender" data-type="surrender" hidden>Сдаться</button>
+				<button class="btn-app btn-surrender" data-type="again" hidden>Играть ещё раз</button>
 			</div>
 			<div data-side="opponent">
 				<h1 class="item" data-status="opponent">Поле противника</h1>
-				<button class="btn-app btn-surrender" data-type="surrender" hidden>Сдаться</button>
-				<button class="btn-app" data-type="again" hidden>Играть ещё раз</button>
+			</div>
+		</div>
+		<div class="app-chat" hidden>
+			<input class="app-chatinput" placeholder="Написать сообщение..."/>
+			<div class="app-messages">
+				<div class="app-message">Some message</div>
+				<div class="app-message">Some message</div>
+				<div class="app-message">Some message</div>
 			</div>
 		</div>
 	</div>

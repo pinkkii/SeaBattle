@@ -17,21 +17,41 @@ class OnlineScene extends Scene{
             this.statusUpdate();
         });
 
-        // -- оставил на потом(не применяется)
-        socket.on("addShoot", ({x, y, variant}) => {
-            console.log("OnlineScene(addShoot)");
-            const shoot = new ShootView(x, y, variant);
+        socket.on("message", (message, playerString) => {
+            const div = document.createElement("div");
+            div.classList.add("app-message");
+            div.textContent = message;
 
-            if (this.ownTurn) {
-                this.app.opponent.addShoot(shoot);
-            } else {
-                this.app.player.addShoot(shoot);
+            if (playerString === "player2") {
+                console.log('player2');
+                div.classList.add("text-right");
+            } else if (playerString === "player1") {
+                console.log('player1');
+                div.classList.add("text-left");
             }
+
+            const chat = document.querySelector(".app-messages");
+            chat.append(div);
         });
+
+        socket.on('challengeOpponent', key => {
+            history.pushState(null, null, `/${key}`);
+            alert(`Первый кто перейдет по этой ссылке будет играть с Вами:\n${location.href}`);
+        });
+
+        // -- оставил на потом(не применяется)
+        // socket.on("addShoot", ({x, y, variant}) => {
+        //     const shoot = new ShootView(x, y, variant);
+
+        //     if (this.ownTurn) {
+        //         this.app.opponent.addShoot(shoot);
+        //     } else {
+        //         this.app.player.addShoot(shoot);
+        //     }
+        // });
         // --/ оставил на потом(не применяется)
 
         socket.on("setShoots", (ownShoots, opponentShoots) => {
-            console.log("OnlineScene(setShoots)");
             player.removeAllShoots();
 
             for(const {x, y, variant} of ownShoots){
@@ -47,23 +67,7 @@ class OnlineScene extends Scene{
             }
         });
 
-        // socket.on("addStars", () => {
-        //     console.log("addStarsOnline");
-        //     if (this.ownTurn) {
-        //         const ship = opponent.killedShip;
-        //         if (ship) {
-        //             this.app.opponent.addStars(ship);
-        //         }
-        //     } else {
-        //         const ship = player.killedShip;
-        //         if (ship) {
-        //             this.app.player.addShoot(ship);   
-        //         }
-        //     }
-        // });
-
         socket.on("setStars", (ownShips, opponentShips) => {
-            console.log("OnlineScene: setStars");
 
             player.removeAllStars();
 
@@ -81,7 +85,9 @@ class OnlineScene extends Scene{
         this.statusUpdate();
     }
 
-    start(variant) {
+    start(variant, key = '') {
+        console.log("Online scene start");
+
         const { socket, player } = this.app;
 
         socket.emit("shipSet", player.ships.map((ship) => ({
@@ -91,35 +97,59 @@ class OnlineScene extends Scene{
             y: ship.y
             }))
         );
- 
-        socket.emit("findRandomOpponent");
+
+        if (variant === 'random') {
+            socket.emit("findRandomOpponent");
+        } else if (variant === 'challenge') {
+            socket.emit("challengeOpponent", key);
+        }
 
         document.querySelector(`[data-type="play"]`).hidden = true; 
         document.querySelector(`[data-type="random"]`).hidden = true;
         document.querySelector(`[data-type="manually"]`).hidden = true;
         document.querySelector(`[data-type="surrender"]`).hidden = true;
         document.querySelector(`[data-type="randomPlayer"]`).hidden = true;
-        const btnGaveUp = document.querySelector('[data-type="surrender"]').hidden = false;
-        const btnAgain = document.querySelector('[data-type="again"]').hidden = true;
+        document.querySelector(`[data-type="challenge"]`).hidden = true;
+        document.querySelector(`[data-type="takeChallenge"]`).hidden = true;
+        document.querySelector(".app-messages").textContent = "";
+
+        const chat = document.querySelector(".app-chat");
+        chat.hidden = false;
+        
+
+        const btnGaveUp = document.querySelector('[data-type="surrender"]');
+        const btnAgain = document.querySelector('[data-type="again"]');
+        let battleStatus = document.querySelector(".battle-status");
+        
+
+        battleStatus.style.visibility= `visible`;
+
+        btnGaveUp.textContent = "Сдаться";
+        btnGaveUp.hidden = false;
+        btnAgain.hidden = true;
 
         this.removeEventListeners = [];
 
-        // this.removeEventListeners.push(addListener(btnGaveUp, "click", () => {
-        //     this.socket.emit("gaveup");
-        //     this.app.start("preparation");
-        // }));
-        // this.removeEventListeners.push(addListener(btnAgain, "click", () => {
-        //     this.app.start("preparation");
-        // }));
+        const input = document.querySelector(".app-chatinput");
 
         this.removeEventListeners.push(
-			addListener(btnGaveUp, "click", () => {
+			addListener(input, "keydown", (e) => {
+                if (e.key === 'Enter' && input.value) {
+                    const message = input.value;
+                    input.value = '';
+                    socket.emit("message", message);
+                }
+			})
+		);
+
+        this.removeEventListeners.push(
+			addListener(btnAgain, "click", () => {
 				this.app.start("preparation");
 			})
 		);
 
 		this.removeEventListeners.push(
-			addListener(btnAgain, "click", () => {
+			addListener(btnGaveUp,"click", () => {
 				socket.emit("gaveup");
 				this.app.start("preparation");
 			})
@@ -134,6 +164,8 @@ class OnlineScene extends Scene{
         }
 
         this.removeEventListeners = [];
+        document.querySelector(".app-chat").hidden = true;
+        document.querySelector(".app-messages").textContent = "";
     }
 
     statusUpdate() {
@@ -156,8 +188,12 @@ class OnlineScene extends Scene{
             }
         } else if (this.status === "winner") {
             divStatus.textContent = "Вы победили!!!";
+            console.log("отработал выиграш")
         } else if (this.status === "loser") {
             divStatus.textContent = "Вы проиграли(";
+            console.log("отработал ПРОИГРЫШ")
+        } else if (this.status === "waiting") {
+            divStatus.textContent = "Ожидаем соперника";
         }
     }
 
@@ -165,9 +201,15 @@ class OnlineScene extends Scene{
         const { mouse, opponent, socket, player } = this.app;
 
         const cells = opponent.cells.flat();
+
+        if (['loser', 'winner'].includes(this.status)) {
+            const btnGaveUp = document.querySelector('[data-type="surrender"]');
+            const btnAgain = document.querySelector('[data-type="again"]');
+            btnGaveUp.hidden = true;
+            btnAgain.hidden = false;
+        }
  
         if (player.loser) {
-            console.log("eee");
             return;
         }
 

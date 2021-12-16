@@ -9,7 +9,6 @@ body, .btn-app{
 }
 
 body{
-	//background: url("/src/img/backgroundIMG.jpeg") right;
 	background: rgb(211, 206, 206);
 	width: 100vw;
 	height: 100vh;
@@ -89,7 +88,16 @@ body{
 				font-size:medium;
 				max-width: 250px;
 				padding: 7px 14px;
-				margin-bottom: 15px;
+				margin-bottom: 10px;
+
+				&:hover {
+					background: wheat;
+					transform: scale(1.05);
+				}
+
+				&:active {
+					background: rgb(243, 206, 138);
+				}
 			}
 			.result{
 				padding-bottom: 130px;
@@ -102,7 +110,7 @@ body{
 	}
 }
 
-.ship{
+.ship{ 
 	position: absolute;
 	top: 0;
 	left: 0;
@@ -200,4 +208,55 @@ body{
 	position: absolute;
 	flex-direction: column;
 	justify-content: center;
+}
+
+.app-chat {
+	max-width: 600px;
+    width: 100%;
+
+	margin: 25px 0px 50px 132px;
+	font-family:'Times New Roman', Times, serif;
+
+	.app-chatinput {
+		width: 100%;
+
+		font-size: 18px;
+		height: 40px;
+
+		border-radius: 5px;
+
+		&:active {
+			border: 2px solid rgb(194, 173, 173);
+		}
+
+		&:hover {
+			transform: scale(1.03);
+		}
+	}
+
+	.app-messages {
+		.app-message {
+			user-select: text;
+
+			color: white;
+			font-size: 18px;
+			margin-top: 10px;
+			
+			padding: 5px 8px;
+			background: rgb(165, 158, 158);
+			border-radius: 7px;
+		}
+	}
+}
+
+.text-left {
+	text-align: left;
+}
+
+.text-right {
+	text-align: right;
+}
+
+.hidden {
+	display: none;
 }

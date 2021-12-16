@@ -42,15 +42,22 @@ class PreparationScene extends Scene{
         const btnManually = document.querySelector(`[data-type="manually"]`);
         const surrender = document.querySelector(`[data-type="surrender"]`);
         const btnRandomPlayer = document.querySelector(`[data-type="randomPlayer"]`);
+        const challengeBtn = document.querySelector(`[data-type="challenge"]`);
+        const takeChallengeBtn = document.querySelector(`[data-type="takeChallenge"]`);
 
-
+        let btnAgain = document.querySelector(`[data-type="again"]`);
         let playerStatus = document.querySelector(`[data-status="player"]`);
         let opponentStatus = document.querySelector(`[data-status="opponent"]`);
         let status = document.querySelector(".result");
+        let battleStatus = document.querySelector(".battle-status");
 
         opponentStatus.style.backgroundColor = `rgba(224, 24, 24, .6)`;
         playerStatus.style.backgroundColor = `rgba(224, 24, 24, .6)`;
+        battleStatus.style.visibility= `hidden`;
 
+        takeChallengeBtn.hidden = false;
+        challengeBtn.hidden = false;
+        btnAgain.hidden = true;
         btnPlay.hidden = false;
         btnRandom.hidden = false;
         btnManually.hidden = false;
@@ -72,6 +79,17 @@ class PreparationScene extends Scene{
 
         this.removeEventListeners.push(
             addListener(btnRandomPlayer, "click", () => this.app.start("online", "random"))
+        );
+
+        this.removeEventListeners.push(
+            addListener(challengeBtn, "click", () => this.app.start("online", "challenge"))
+        );
+
+        this.removeEventListeners.push(
+            addListener(takeChallengeBtn, "click", () => {
+                const key = prompt('Ключ партии: ');
+                this.app.start("online", "challenge", key);
+            })
         );
     }
 
@@ -159,9 +177,13 @@ class PreparationScene extends Scene{
         if (player.complete) {
             document.querySelector(`[data-type="play"]`).disabled = false;
             document.querySelector(`[data-type="randomPlayer"]`).disabled = false;
+            document.querySelector(`[data-type="challenge"]`).disabled = false;
+            document.querySelector(`[data-type="takeChallenge"]`).disabled = false;
         } else {
             document.querySelector(`[data-type="play"]`).disabled = true;
             document.querySelector(`[data-type="randomPlayer"]`).disabled = true;
+            document.querySelector(`[data-type="challenge"]`).disabled = true;
+            document.querySelector(`[data-type="takeChallenge"]`).disabled = true;
         }
 
     }
