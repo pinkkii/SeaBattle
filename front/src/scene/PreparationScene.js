@@ -116,29 +116,6 @@ class PreparationScene extends Scene{
 
             this.draggedShip.div.style.left = `${x}px`;
             this.draggedShip.div.style.top = `${y}px`;
-
-            // {
-            //     const ship = this.draggedShip;
-            //     const { left, top } = ship.div.getBoundingClientRect();
-            //     const { width, height } = player.cells[0][0].getBoundingClientRect();
-    
-            //     const point = {
-            //         x: left + width / 2,
-            //         y: top + height / 2,
-            //     }
-    
-            //     const cell = player.cells.flat().find((cell) => isUnderPoint(point, cell));
-            //     if (cell) {
-            //         const x = parseInt(cell.dataset.x);
-            //         const y = parseInt(cell.dataset.y);
-            //         // cell.style.backgroundColor = `red`;
-            //         const shadowShip = new ShadowShip(ship.size,ship.direction);
-            //         this.shadowShip = shadowShip;
-            //         player.addShadowShip(shadowShip, x, y);
-            //     } else {
-            //         player.removeShadow(this.shadowShip);
-            //     }
-            // }
         }
 
         // Бросание
@@ -185,7 +162,6 @@ class PreparationScene extends Scene{
             document.querySelector(`[data-type="challenge"]`).disabled = true;
             document.querySelector(`[data-type="takeChallenge"]`).disabled = true;
         }
-
     }
 
     stop(){

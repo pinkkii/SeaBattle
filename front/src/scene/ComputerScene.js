@@ -113,7 +113,6 @@ class ComputerScene extends Scene{
                 }
             }   
         }
-        
     }
 
     RandomPlaceShips(){

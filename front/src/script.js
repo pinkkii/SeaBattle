@@ -5,5 +5,3 @@ const app = new Application({
 });
 
 app.start("preparation");
-
-document.querySelector(`[data-type="random"]`).click();
